@@ -1,0 +1,12 @@
+FROM docker.io/node:22.5.1
+
+RUN apt-get update
+
+# enter the circom directory
+WORKDIR /app
+
+WORKDIR ..
+
+RUN npm install -g pnpm
+
+CMD [ "node", "--help" ]
