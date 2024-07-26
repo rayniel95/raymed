@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
     uint256 private _nextTokenId;
     address internal _doctorNftContractAddress;
-    
+
     constructor(
         address doctorNftContract
     ) ERC721("MedicalRecord", "MRTK") {
@@ -30,7 +30,7 @@ contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     //TODO - maybe migrate this to a doctor access control contract or something
     modifier isDoctor(address doctorNftContractAddress) {
-        _checkNFTOwnership(doctorNftContractAddress, _msgSender());
+        require(_checkNFTOwnership(doctorNftContractAddress, _msgSender()), "Not a doctor");
         _;
     }
 
