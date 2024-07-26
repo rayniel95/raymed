@@ -16,7 +16,7 @@ contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
     ) ERC721("MedicalRecord", "MRTK") {
         _doctorNftContractAddress = doctorNftContract;
     }
-    //TODO - add update function
+
     function _baseURI() internal pure override returns (string memory) {
         return "kokokokkko";
     }
@@ -29,6 +29,10 @@ contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     function transferFrom(address from, address to, uint256 tokenId) public virtual override(ERC721, IERC721) {
         require(false, "Transfers are currently locked");
+    }
+
+    function setTokenURI(uint256 tokenId, string memory _newUri) public onlyDoctor(_doctorNftContractAddress) {
+        _setTokenURI(tokenId, _newUri);
     }
 
     //TODO - maybe migrate this to a doctor access control contract or something
