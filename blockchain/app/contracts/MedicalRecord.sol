@@ -22,14 +22,14 @@ contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
         return "kokokokkko";
     }
 
-    function safeMint(address to, string memory uri) public isDoctor(_doctorNftContractAddress) {
+    function safeMint(address to, string memory uri) public onlyDoctor(_doctorNftContractAddress) {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
 
     //TODO - maybe migrate this to a doctor access control contract or something
-    modifier isDoctor(address doctorNftContractAddress) {
+    modifier onlyDoctor(address doctorNftContractAddress) {
         require(_checkNFTOwnership(doctorNftContractAddress, _msgSender()), "Not a doctor");
         _;
     }
