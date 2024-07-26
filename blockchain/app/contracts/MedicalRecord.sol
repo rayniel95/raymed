@@ -5,23 +5,24 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {NftOwner} from "./access control/NftOwner.sol";
 
 
-contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
+contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage, NftOwner {
     uint256 private _nextTokenId;
     address internal _doctorNftContractAddress;
 
     constructor(
         address doctorNftContract
-    ) ERC721("MedicalRecord", "MRTK") {
+    ) ERC721("MedicalRecord", "MRTK") NftOwner(doctorNftContract){
         _doctorNftContractAddress = doctorNftContract;
     }
-
+    //TODO - fix this
     function _baseURI() internal pure override returns (string memory) {
         return "kokokokkko";
     }
 
-    function safeMint(address to, string memory uri) public onlyDoctor(_doctorNftContractAddress) {
+    function safeMint(address to, string memory uri) public onlyNftOwner() {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
@@ -31,22 +32,22 @@ contract MedicalRecord is ERC721, ERC721Enumerable, ERC721URIStorage {
         require(false, "Transfers are currently locked");
     }
 
-    function setTokenURI(uint256 tokenId, string memory _newUri) public onlyDoctor(_doctorNftContractAddress) {
+    function setTokenURI(uint256 tokenId, string memory _newUri) public onlyNftOwner() {
         _setTokenURI(tokenId, _newUri);
     }
 
-    //TODO - maybe migrate this to a doctor access control contract or something
-    modifier onlyDoctor(address doctorNftContractAddress) {
-        require(_checkNFTOwnership(doctorNftContractAddress, _msgSender()), "Not a doctor");
-        _;
-    }
+    // //TODO - maybe migrate this to a doctor access control contract or something
+    // modifier onlyDoctor(address doctorNftContractAddress) {
+    //     require(_checkNFTOwnership(doctorNftContractAddress, _msgSender()), "Not a doctor");
+    //     _;
+    // }
 
-    function _checkNFTOwnership(
-        address nftContractAddress, 
-        address potentialOwner
-    ) internal view returns (bool) {
-        return IERC721(nftContractAddress).balanceOf(potentialOwner) > 0;
-    }
+    // function _checkNFTOwnership(
+    //     address nftContractAddress, 
+    //     address potentialOwner
+    // ) internal view returns (bool) {
+    //     return IERC721(nftContractAddress).balanceOf(potentialOwner) > 0;
+    // }
 
     // The following functions are overrides required by Solidity.
 
