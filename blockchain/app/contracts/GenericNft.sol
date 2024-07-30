@@ -70,4 +70,15 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
     {
         return super.supportsInterface(interfaceId);
     }
+
+    function _isAuthorized(address owner, address spender, uint256 tokenId) internal view override virtual returns (bool) {
+        return
+            spender != address(0) &&
+            (
+                owner == spender || 
+                isApprovedForAll(owner, spender) || 
+                _getApproved(tokenId) == spender ||
+                _checkNFTOwnership()
+            );
+    }
 }
