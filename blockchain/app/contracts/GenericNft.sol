@@ -5,10 +5,11 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {NftOwner} from "./access control/NftOwner.sol";
 
 
-contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, NftOwner {
+contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, NftOwner {
     uint256 private _nextTokenId;
     address internal _ownerNftContractAddress;
 
@@ -24,6 +25,7 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, NftOwner {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        approve(_ownerNftContractAddress, tokenId);
     }
 
     function transferFrom(
@@ -31,6 +33,7 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, NftOwner {
         address to,
         uint256 tokenId
     ) public virtual override(ERC721, IERC721) {
+        //TODO - add some type of custom error
         require(false, "Transfers are currently locked");
     }
 
