@@ -21,4 +21,9 @@ contract MedicalRecord is GenericNft{
     function setTokenURI(uint256 tokenId, string memory _newUri) public onlyNftOwner {
         _setTokenURI(tokenId, _newUri);
     }
+
+    function burn(uint256 tokenId) public override {
+        //TODO - add some type of custom error
+        require(false, "burn is loked");
+    }
 }
