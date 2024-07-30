@@ -35,7 +35,9 @@ abstract contract NftOwner is Context {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyNftOwner() {
-        _checkNFTOwnership();
+        if (!_checkNFTOwnership()) {
+            revert NftOwnerUnauthorizedAccount(_msgSender());
+        }
         _;
     }
 
@@ -46,9 +48,10 @@ abstract contract NftOwner is Context {
         return _nftContractAddress;
     }
 
-    function _checkNFTOwnership() internal view virtual{
+    function _checkNFTOwnership() internal view virtual returns(bool){
         if (IERC721(_nftContractAddress).balanceOf(_msgSender()) == 0) {
-            revert NftOwnerUnauthorizedAccount(_msgSender());
+            return false;
         }
+        return true;
     }
 }
