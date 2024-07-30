@@ -2,7 +2,7 @@
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.20;
 
-import {GenericNft} from "./GenericNft.sol";
+import {GenericNft} from "./common/GenericNft.sol";
 
 
 contract Doctor is GenericNft {
