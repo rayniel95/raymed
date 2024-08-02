@@ -21,8 +21,6 @@ contract Admin is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     function safeMint(address to) public onlyOwner {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
-        address owner = Ownable.owner();
-        approve(owner, tokenId);
     }
 
     function transferFrom(
@@ -34,6 +32,9 @@ contract Admin is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
         require(false, "Transfers are currently locked");
     }
 
+    function burn(uint256 tokenId) public virtual override onlyOwner {
+        _burn(tokenId);
+    }
     // The following functions are overrides required by Solidity.
 
     function _update(
