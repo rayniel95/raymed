@@ -5,6 +5,8 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import hre from "hardhat";
+import { token } from "../typechain-types/@openzeppelin/contracts";
+import { Admin } from "../typechain-types";
 
 describe("Admin", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -24,7 +26,7 @@ describe("Admin", function () {
     // Contracts are deployed using the first signer/account by default
     const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
-    await admin.safeMint(otherAccount);
+    await admin.safeMint(otherAccount)
     return { admin, owner, otherAccount };
   }
 
@@ -52,7 +54,14 @@ describe("Admin", function () {
   });
 
   describe("Basic opertions", function () {
-    it("Should have symbol ATK", async function () {
+    describe("Mint related tests", function () {
+      it("Should mint a nft", async function () {
+        const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
+
+        expect(await admin.safeMint(otherAccount)).to.not.be.reverted;
+        expect(await admin.balanceOf(otherAccount)).to.equal(1);
+      });
+
       const { admin, owner, otherAccount } = await loadFixture(mintFirstNft);
 
       expect(await admin).to.equal("ATK");
