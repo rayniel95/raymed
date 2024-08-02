@@ -62,6 +62,18 @@ describe("Admin", function () {
         expect(await admin.balanceOf(otherAccount)).to.equal(1);
       });
 
+      it("Should not allow to mint a nft", async function () {
+        const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
+
+        await expect(
+          (admin.connect(otherAccount) as Admin).safeMint(otherAccount)
+        ).to.be.revertedWithCustomError(
+          admin,
+          "OwnableUnauthorizedAccount"
+        ).withArgs(otherAccount);
+      });
+    })
+
       const { admin, owner, otherAccount } = await loadFixture(mintFirstNft);
 
       expect(await admin).to.equal("ATK");
