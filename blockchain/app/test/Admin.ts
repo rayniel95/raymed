@@ -27,7 +27,8 @@ describe("Admin", function () {
     const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
     await admin.safeMint(otherAccount)
-    return { admin, owner, otherAccount };
+    const tokenId = 1;
+    return { admin, owner, otherAccount, tokenId };
   }
 
   describe("Deployment", function () {
@@ -42,15 +43,6 @@ describe("Admin", function () {
 
       expect(await admin.symbol()).to.equal("ATK");
     });
-
-    // it("Should fail if the unlockTime is not in the future", async function () {
-    //   // We don't use the fixture here because we want a different deployment
-    //   const latestTime = await time.latest();
-    //   const Lock = await hre.ethers.getContractFactory("Lock");
-    //   await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-    //     "Unlock time should be in the future"
-    //   );
-    // });
   });
 
   describe("Basic opertions", function () {
@@ -74,9 +66,17 @@ describe("Admin", function () {
       });
     })
 
-      const { admin, owner, otherAccount } = await loadFixture(mintFirstNft);
-
-      expect(await admin).to.equal("ATK");
-    });
+    describe("Transfers related test", function() {
+      it("Should not to allow transfer the nft", async function () {
+        const { admin, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+        
+        await expect(
+          (admin.connect(otherAccount) as Admin).transferFrom(otherAccount, owner, 1)
+        ).to.be.revertedWith("Transfers are currently locked");
+        await expect(
+          admin.transferFrom(otherAccount, owner, tokenId)
+        ).to.be.revertedWith("Transfers are currently locked");
+      });
+    })
   })
 });
