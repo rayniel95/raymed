@@ -78,5 +78,24 @@ describe("Admin", function () {
         ).to.be.revertedWith("Transfers are currently locked");
       });
     })
+
+    describe("Burn related test", function() {
+      it("Should not to allow burn the nft", async function () {
+        const { admin, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+        
+        await expect(
+          (admin.connect(otherAccount) as Admin).burn(1)
+        ).to.be.revertedWithCustomError(admin, "OwnableUnauthorizedAccount");
+  
+      });
+      it("Should allow burn the nft", async function () {
+        const { admin, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+        
+        expect(
+          await admin.burn(tokenId)
+        ).to.not.reverted;
+  
+      });
+    })
   })
 });
