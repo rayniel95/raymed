@@ -27,7 +27,7 @@ describe("Admin", function () {
     const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
     await admin.safeMint(otherAccount)
-    const tokenId = 1;
+    const tokenId = 0;
     return { admin, owner, otherAccount, tokenId };
   }
 
