@@ -25,7 +25,7 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        approve(_ownerNftContractAddress, tokenId);
+        // approve(_ownerNftContractAddress, tokenId);
     }
 
     function transferFrom(
@@ -37,6 +37,9 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         require(false, "Transfers are currently locked");
     }
 
+    function burn(uint256 tokenId) public virtual override onlyNftOwner {
+        _burn(tokenId);
+    }
     // The following functions are overrides required by Solidity.
 
     function _update(
@@ -71,14 +74,14 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         return super.supportsInterface(interfaceId);
     }
 
-    function _isAuthorized(address owner, address spender, uint256 tokenId) internal view override virtual returns (bool) {
-        return
-            spender != address(0) &&
-            (
-                owner == spender || 
-                isApprovedForAll(owner, spender) || 
-                _getApproved(tokenId) == spender ||
-                _checkNFTOwnership()
-            );
-    }
+    // function _isAuthorized(address owner, address spender, uint256 tokenId) internal view override virtual returns (bool) {
+    //     return
+    //         spender != address(0) &&
+    //         (
+    //             owner == spender || 
+    //             isApprovedForAll(owner, spender) || 
+    //             _getApproved(tokenId) == spender ||
+    //             _checkNFTOwnership()
+    //         );
+    // }
 }
