@@ -14,12 +14,12 @@ describe("Patient", function () {
   // and reset Hardhat Network to that snapshot in every test.
   async function deployAdminFixture() {
     // Contracts are deployed using the first signer/account by default
-    const [owner, account1, account2] = await hre.ethers.getSigners();
+    const [superUser, account1, account2] = await hre.ethers.getSigners();
 
     const AdminFactory = await hre.ethers.getContractFactory("Admin");
-    const adminDeployed = await AdminFactory.deploy(await owner.getAddress());
+    const adminDeployed = await AdminFactory.deploy(await superUser.getAddress());
     const admin = await adminDeployed.waitForDeployment();
-    return { admin, owner, account1, account2 };
+    return { admin, superUser, account1, account2 };
   }
 
   async function mintFirstAdmin() {
