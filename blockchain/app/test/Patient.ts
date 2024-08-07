@@ -22,7 +22,13 @@ describe("Patient", function () {
     return { admin, owner, account1, account2 };
   }
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
+  async function mintFirstAdmin() {
+    // Contracts are deployed using the first signer/account by default
+    const { admin, owner, account1, account2 } = await loadFixture(deployAdminFixture);
+
+    await admin.safeMint(account1)
+    const tokenId = 0;
+    return { admin, owner,  account1, account2 };
   }
 
   describe("Deployment", function () {
