@@ -39,13 +39,13 @@ describe("Doctor", function () {
     return { doctor, admin, deployer, superUser, adminUser, doctorUser };
   }
 
-  async function mintFirstDoctor() {
-      // Contracts are deployed using the first signer/account by default
-      const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+  // async function mintFirstDoctor() {
+  //     // Contracts are deployed using the first signer/account by default
+  //     const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
 
-      await admin.connect(deployer).safeMint(doctorUser);
-      return { admin, deployer, superUser, adminUser, doctorUser };
-  }
+  //     await admin.connect(deployer).safeMint(doctorUser);
+  //     return { admin, deployer, superUser, adminUser, doctorUser };
+  // }
 
   describe("Deployment", function () {
     it("Should say contract owner is owner address", async function () {
