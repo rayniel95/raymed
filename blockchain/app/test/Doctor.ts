@@ -24,11 +24,10 @@ describe("Doctor", function () {
 
   async function mintFirstAdmin() {
     // Contracts are deployed using the first signer/account by default
-    const { admin, superUser, , account2 } = await loadFixture(deployAdminFixture);
+    const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployAdminFixture);
 
-    await admin.safeMint(account1)
-    const tokenId = 0;
-    return { admin, superUser,  account1, account2 };
+    await admin.safeMint(adminUser);
+    return { admin, deployer, superUser, adminUser, doctorUser };
   }
 
   async function deployPatientFixture() {
