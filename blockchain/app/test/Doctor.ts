@@ -26,18 +26,25 @@ describe("Doctor", function () {
     // Contracts are deployed using the first signer/account by default
     const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployAdminFixture);
 
-    await admin.safeMint(adminUser);
+    await admin.connect(deployer).safeMint(adminUser);
     return { admin, deployer, superUser, adminUser, doctorUser };
   }
 
-  async function deployPatientFixture() {
-    // Contracts are deployed using the first signer/account by default
-    const [owner, adminNft, account2] = await hre.ethers.getSigners();
+  async function deployDoctorFixture() {
+    const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(mintFirstAdmin);
 
-    const PatientFactory = await hre.ethers.getContractFactory("Patient");
-    const doctorDeployed = await PatientFactory.deploy(await owner.getAddress());
+    const DoctorFactory = await hre.ethers.getContractFactory("Doctor");
+    const doctorDeployed = await DoctorFactory.connect(deployer).deploy(await admin.getAddress());
     const doctor = await doctorDeployed.waitForDeployment();
-    return { doctor, owner, adminNft, account2 };
+    return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+  }
+
+  async function mintFirstDoctor() {
+      // Contracts are deployed using the first signer/account by default
+      const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+
+      await admin.connect(deployer).safeMint(doctorUser);
+      return { admin, deployer, superUser, adminUser, doctorUser };
   }
 
   describe("Deployment", function () {
