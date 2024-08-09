@@ -8,7 +8,7 @@ import {
   import { token } from "../typechain-types/@openzeppelin/contracts";
   import { Doctor, Patient } from "../typechain-types";
   
-  describe("Doctor", function () {
+  describe("MedicalRecord", function () {
     // We define a fixture to reuse the same setup in every test.
     // We use loadFixture to run this setup once, snapshot that state,
     // and reset Hardhat Network to that snapshot in every test.
