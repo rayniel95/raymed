@@ -6,7 +6,7 @@ import {
   import { expect } from "chai";
   import hre from "hardhat";
   import { token } from "../typechain-types/@openzeppelin/contracts";
-  import { Doctor, Patient } from "../typechain-types";
+  import { Doctor, MedicalRecord, Patient } from "../typechain-types";
   
   describe("MedicalRecord", function () {
     // We define a fixture to reuse the same setup in every test.
@@ -79,19 +79,19 @@ import {
     describe("Basic opertions", function () {
       describe("Mint related tests", function () {
         it("Should mint a nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+          const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(deployMedicalRecordFixture);
   
-          expect(await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url')).to.not.be.reverted;
-          expect(await doctor.balanceOf(doctorUser)).to.equal(1);
+          expect(await medicalRecord.connect(doctorUser).safeMint(patientUser, 'http://test.url')).to.not.be.reverted;
+          expect(await medicalRecord.balanceOf(patientUser)).to.equal(1);
         });
   
         it("Should not allow to mint a nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+          const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(deployMedicalRecordFixture);
   
           await expect(
-            (doctor.connect(superUser) as Doctor).safeMint(doctorUser, 'https://test.url')
+            (medicalRecord.connect(superUser) as MedicalRecord).safeMint(patientUser, 'https://test.url')
           ).to.be.revertedWithCustomError(
-            doctor,
+            medicalRecord,
             "NftOwnerUnauthorizedAccount"
           ).withArgs(superUser);
         });
