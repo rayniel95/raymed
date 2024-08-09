@@ -61,7 +61,7 @@ import {
           const {patient, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser} = await loadFixture(deployPatientFixture);
     
           await patient.connect(doctorUser).safeMint(patientUser, 'http://test.url');
-          return { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
+          return { patient, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
       }
 
     describe("Deployment", function () {
@@ -81,19 +81,14 @@ import {
     describe("Basic opertions", function () {
       describe("Burn related test", function() {
         it("Should not to allow burn the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
+          const { patient, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser  } = await loadFixture(mintFirstPatient);
           
           await expect(
-            (doctor.connect(doctorUser) as Doctor).burn(0)
-          ).to.be.revertedWithCustomError(doctor, "NftOwnerUnauthorizedAccount");
-    
-        });
-        it("Should allow burn the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
-          
-          expect(
-            await (doctor.connect(adminUser) as Doctor).burn(0)
-          ).to.not.reverted;
+            (patient.connect(doctorUser) as Patient).burn(0)
+          ).to.be.revertedWith("burn is loked");
+          await expect(
+            (patient.connect(adminUser) as Patient).burn(0)
+          ).to.be.revertedWith("burn is loked");
         });
       })
     })
