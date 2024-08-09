@@ -47,20 +47,20 @@ import {
         return { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
     async function deployMedicalRecordFixture() {
-        const { admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstAdmin);
+        const { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstDoctor);
     
-        const DoctorFactory = await hre.ethers.getContractFactory("Doctor");
-        const doctorDeployed = await DoctorFactory.connect(deployer).deploy(await admin.getAddress());
-        const doctor = await doctorDeployed.waitForDeployment();
-        return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+        const MedicalRecordFactory = await hre.ethers.getContractFactory("MedicalRecord");
+        const medicalRecordDeployed = await MedicalRecordFactory.connect(deployer).deploy(await doctor.getAddress());
+        const medicalRecord = await medicalRecordDeployed.waitForDeployment();
+        return { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
       }
     
       async function mintFirstMedicalRecord() {
           // Contracts are deployed using the first signer/account by default
-          const {doctor, admin, deployer, superUser, adminUser, doctorUser} = await loadFixture(deployDoctorFixture);
+          const {medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser} = await loadFixture(deployMedicalRecordFixture);
     
-          await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url');
-          return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+          await medicalRecord.connect(doctorUser).safeMint(patientUser, 'http://test.url');
+          return { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
       }
     describe("Deployment", function () {
       it("Should say owner contract address is admin contract address", async function () {
