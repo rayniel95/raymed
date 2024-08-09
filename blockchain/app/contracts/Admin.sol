@@ -24,6 +24,15 @@ contract Admin is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
         _setTokenURI(tokenId, uri);
     }
 
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override(ERC721, IERC721) {
+        //TODO - add some type of custom error
+        require(false, "Transfers are currently locked");
+    }
+
     function burn(uint256 tokenId) public virtual override onlyOwner {
         _burn(tokenId);
     }
