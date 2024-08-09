@@ -26,7 +26,7 @@ describe("Doctor", function () {
     // Contracts are deployed using the first signer/account by default
     const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployAdminFixture);
 
-    await admin.connect(superUser).safeMint(adminUser);
+    await admin.connect(superUser).safeMint(adminUser, 'http://test.url');
     return { admin, deployer, superUser, adminUser, doctorUser };
   }
 

@@ -26,7 +26,7 @@ describe("Admin", function () {
     // Contracts are deployed using the first signer/account by default
     const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
-    await admin.safeMint(otherAccount)
+    await admin.safeMint(otherAccount, 'http://test.url');
     const tokenId = 0;
     return { admin, owner, otherAccount, tokenId };
   }
@@ -50,7 +50,7 @@ describe("Admin", function () {
       it("Should mint a nft", async function () {
         const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
-        expect(await admin.safeMint(otherAccount)).to.not.be.reverted;
+        expect(await admin.safeMint(otherAccount, 'http://test.url')).to.not.be.reverted;
         expect(await admin.balanceOf(otherAccount)).to.equal(1);
       });
 
@@ -58,7 +58,7 @@ describe("Admin", function () {
         const { admin, owner, otherAccount } = await loadFixture(deployAdminFixture);
 
         await expect(
-          (admin.connect(otherAccount) as Admin).safeMint(otherAccount)
+          (admin.connect(otherAccount) as Admin).safeMint(otherAccount, 'http://test.url')
         ).to.be.revertedWithCustomError(
           admin,
           "OwnableUnauthorizedAccount"
