@@ -14,37 +14,37 @@ import {
     // and reset Hardhat Network to that snapshot in every test.
     async function deployAdminFixture() {
       // Contracts are deployed using the first signer/account by default
-      const [deployer, superUser, adminUser, doctorUser] = await hre.ethers.getSigners();
+      const [deployer, superUser, adminUser, doctorUser, patientUser] = await hre.ethers.getSigners();
   
       const AdminFactory = await hre.ethers.getContractFactory("Admin");
       const adminDeployed = await AdminFactory.connect(deployer).deploy(await superUser.getAddress());
       const admin = await adminDeployed.waitForDeployment();
-      return { admin, deployer, superUser, adminUser, doctorUser };
+      return { admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
   
     async function mintFirstAdmin() {
       // Contracts are deployed using the first signer/account by default
-      const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployAdminFixture);
+      const { admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(deployAdminFixture);
   
       await admin.connect(superUser).safeMint(adminUser, 'http://test.url');
-      return { admin, deployer, superUser, adminUser, doctorUser };
+      return { admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
   
     async function deployDoctorFixture() {
-      const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(mintFirstAdmin);
+      const { admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstAdmin);
   
       const DoctorFactory = await hre.ethers.getContractFactory("Doctor");
       const doctorDeployed = await DoctorFactory.connect(deployer).deploy(await admin.getAddress());
       const doctor = await doctorDeployed.waitForDeployment();
-      return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+      return { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
   
     async function mintFirstDoctor() {
         // Contracts are deployed using the first signer/account by default
-        const {doctor, admin, deployer, superUser, adminUser, doctorUser} = await loadFixture(deployDoctorFixture);
+        const {doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser} = await loadFixture(deployDoctorFixture);
   
         await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url');
-        return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+        return { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
   
     describe("Deployment", function () {
