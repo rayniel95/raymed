@@ -15,7 +15,7 @@ contract MedicalRecord is GenericNft{
     ) GenericNft("MedicalRecord", "MRTK", doctorNftContractAddress){}
     //TODO - fix this
     function _baseURI() internal pure override returns (string memory) {
-        return "kokokokkko";
+        return "http://medical.record";
     }
 
     function setTokenURI(uint256 tokenId, string memory _newUri) public onlyNftOwner {
