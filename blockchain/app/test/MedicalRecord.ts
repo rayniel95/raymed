@@ -63,16 +63,16 @@ import {
           return { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
       }
     describe("Deployment", function () {
-      it("Should say owner contract address is admin contract address", async function () {
-        const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+      it("Should say owner contract address is doctor contract address", async function () {
+        const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(deployMedicalRecordFixture);
   
-        expect(await doctor.nft()).to.equal(await admin.getAddress());
+        expect(await medicalRecord.nft()).to.equal(await doctor.getAddress());
       });
   
-      it("Should have symbol DTK", async function () {
-        const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+      it("Should have symbol MRTK", async function () {
+        const { medicalRecord,doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployMedicalRecordFixture);
   
-        expect(await doctor.symbol()).to.equal("DTK");
+        expect(await medicalRecord.symbol()).to.equal("MRTK");
       });
     });
   
