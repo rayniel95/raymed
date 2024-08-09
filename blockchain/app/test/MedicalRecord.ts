@@ -46,7 +46,22 @@ import {
         await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url');
         return { doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser };
     }
-  
+    async function deployMedicalRecordFixture() {
+        const { admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstAdmin);
+    
+        const DoctorFactory = await hre.ethers.getContractFactory("Doctor");
+        const doctorDeployed = await DoctorFactory.connect(deployer).deploy(await admin.getAddress());
+        const doctor = await doctorDeployed.waitForDeployment();
+        return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+      }
+    
+      async function mintFirstMedicalRecord() {
+          // Contracts are deployed using the first signer/account by default
+          const {doctor, admin, deployer, superUser, adminUser, doctorUser} = await loadFixture(deployDoctorFixture);
+    
+          await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url');
+          return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+      }
     describe("Deployment", function () {
       it("Should say owner contract address is admin contract address", async function () {
         const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
