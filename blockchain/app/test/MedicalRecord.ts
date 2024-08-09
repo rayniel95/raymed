@@ -99,13 +99,13 @@ import {
   
       describe("Transfers related test", function() {
         it("Should not to allow transfer the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
+          const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser  } = await loadFixture(mintFirstMedicalRecord);
           
           await expect(
-            (doctor.connect(doctorUser) as Doctor).transferFrom(doctorUser, adminUser, 0)
+            (medicalRecord.connect(patientUser) as MedicalRecord).transferFrom(patientUser, adminUser, 0)
           ).to.be.revertedWith("Transfers are currently locked");
           await expect(
-            doctor.transferFrom(doctorUser, adminUser, 0)
+            medicalRecord.transferFrom(patientUser, adminUser, 0)
           ).to.be.revertedWith("Transfers are currently locked");
         });
       })
