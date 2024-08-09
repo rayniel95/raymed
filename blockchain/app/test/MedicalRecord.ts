@@ -112,19 +112,20 @@ import {
   
       describe("Burn related test", function() {
         it("Should not to allow burn the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
+          const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser  } = await loadFixture(mintFirstMedicalRecord);
           
           await expect(
-            (doctor.connect(doctorUser) as Doctor).burn(0)
-          ).to.be.revertedWithCustomError(doctor, "NftOwnerUnauthorizedAccount");
-    
-        });
-        it("Should allow burn the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
-          
-          expect(
-            await (doctor.connect(adminUser) as Doctor).burn(0)
-          ).to.not.reverted;
+            (medicalRecord.connect(patientUser) as MedicalRecord).burn(0)
+          ).to.be.revertedWith("burn is loked");
+          await expect(
+            (medicalRecord.connect(doctorUser) as MedicalRecord).burn(0)
+          ).to.be.revertedWith("burn is loked");
+          await expect(
+            (medicalRecord.connect(adminUser) as MedicalRecord).burn(0)
+          ).to.be.revertedWith("burn is loked");
+          await expect(
+            (medicalRecord.connect(superUser) as MedicalRecord).burn(0)
+          ).to.be.revertedWith("burn is loked");
         });
       })
     })
