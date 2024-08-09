@@ -65,53 +65,20 @@ import {
       }
 
     describe("Deployment", function () {
-      it("Should say owner contract address is admin contract address", async function () {
-        const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+      it("Should say owner contract address is doctor contract address", async function () {
+        const { patient, doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployPatientFixture);
   
-        expect(await doctor.nft()).to.equal(await doctor.getAddress());
+        expect(await patient.nft()).to.equal(await doctor.getAddress());
       });
   
-      it("Should have symbol DTK", async function () {
-        const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+      it("Should have symbol PTK", async function () {
+        const { patient, doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployPatientFixture);
   
-        expect(await doctor.symbol()).to.equal("PTK");
+        expect(await patient.symbol()).to.equal("PTK");
       });
     });
   
     describe("Basic opertions", function () {
-      describe("Mint related tests", function () {
-        it("Should mint a nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
-  
-          expect(await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url')).to.not.be.reverted;
-          expect(await doctor.balanceOf(doctorUser)).to.equal(1);
-        });
-  
-        it("Should not allow to mint a nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
-  
-          await expect(
-            (doctor.connect(superUser) as Doctor).safeMint(doctorUser, 'https://test.url')
-          ).to.be.revertedWithCustomError(
-            doctor,
-            "NftOwnerUnauthorizedAccount"
-          ).withArgs(superUser);
-        });
-      })
-  
-      describe("Transfers related test", function() {
-        it("Should not to allow transfer the nft", async function () {
-          const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
-          
-          await expect(
-            (doctor.connect(doctorUser) as Doctor).transferFrom(doctorUser, adminUser, 0)
-          ).to.be.revertedWith("Transfers are currently locked");
-          await expect(
-            doctor.transferFrom(doctorUser, adminUser, 0)
-          ).to.be.revertedWith("Transfers are currently locked");
-        });
-      })
-  
       describe("Burn related test", function() {
         it("Should not to allow burn the nft", async function () {
           const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
