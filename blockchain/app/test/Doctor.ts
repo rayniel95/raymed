@@ -95,23 +95,22 @@ describe("Doctor", function () {
       });
     })
 
-  //   describe("Burn related test", function() {
-  //     it("Should not to allow burn the nft", async function () {
-  //       const { doctor, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+    describe("Burn related test", function() {
+      it("Should not to allow burn the nft", async function () {
+        const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
         
-  //       await expect(
-  //         (doctor.connect(otherAccount) as Patient).burn(1)
-  //       ).to.be.revertedWithCustomError(doctor, "OwnableUnauthorizedAccount");
+        await expect(
+          (doctor.connect(doctorUser) as Doctor).burn(0)
+        ).to.be.revertedWithCustomError(doctor, "NftOwnerUnauthorizedAccount");
   
-  //     });
-  //     it("Should allow burn the nft", async function () {
-  //       const { doctor, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+      });
+      it("Should allow burn the nft", async function () {
+        const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
         
-  //       expect(
-  //         await doctor.burn(tokenId)
-  //       ).to.not.reverted;
-  
-  //     });
-    // })
+        expect(
+          await (doctor.connect(adminUser) as Doctor).burn(0)
+        ).to.not.reverted;
+      });
+    })
   })
 });
