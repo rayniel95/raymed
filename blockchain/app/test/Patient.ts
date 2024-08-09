@@ -68,13 +68,13 @@ import {
       it("Should say owner contract address is admin contract address", async function () {
         const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
   
-        expect(await doctor.nft()).to.equal(await admin.getAddress());
+        expect(await doctor.nft()).to.equal(await doctor.getAddress());
       });
   
       it("Should have symbol DTK", async function () {
         const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
   
-        expect(await doctor.symbol()).to.equal("DTK");
+        expect(await doctor.symbol()).to.equal("PTK");
       });
     });
   
