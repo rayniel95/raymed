@@ -39,13 +39,13 @@ describe("Doctor", function () {
     return { doctor, admin, deployer, superUser, adminUser, doctorUser };
   }
 
-  // async function mintFirstDoctor() {
-  //     // Contracts are deployed using the first signer/account by default
-  //     const { admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
+  async function mintFirstDoctor() {
+      // Contracts are deployed using the first signer/account by default
+      const {doctor, admin, deployer, superUser, adminUser, doctorUser} = await loadFixture(deployDoctorFixture);
 
-  //     await admin.connect(deployer).safeMint(doctorUser);
-  //     return { admin, deployer, superUser, adminUser, doctorUser };
-  // }
+      await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url');
+      return { doctor, admin, deployer, superUser, adminUser, doctorUser };
+  }
 
   describe("Deployment", function () {
     it("Should say owner contract address is admin contract address", async function () {
@@ -82,18 +82,18 @@ describe("Doctor", function () {
       });
     })
 
-  //   describe("Transfers related test", function() {
-  //     it("Should not to allow transfer the nft", async function () {
-  //       const { doctor, owner, otherAccount, tokenId } = await loadFixture(mintFirstNft);
+    describe("Transfers related test", function() {
+      it("Should not to allow transfer the nft", async function () {
+        const { doctor, admin, deployer, superUser, adminUser, doctorUser  } = await loadFixture(mintFirstDoctor);
         
-  //       await expect(
-  //         (doctor.connect(otherAccount) as Patient).transferFrom(otherAccount, owner, 1)
-  //       ).to.be.revertedWith("Transfers are currently locked");
-  //       await expect(
-  //         doctor.transferFrom(otherAccount, owner, tokenId)
-  //       ).to.be.revertedWith("Transfers are currently locked");
-  //     });
-  //   })
+        await expect(
+          (doctor.connect(doctorUser) as Doctor).transferFrom(doctorUser, adminUser, 0)
+        ).to.be.revertedWith("Transfers are currently locked");
+        await expect(
+          doctor.transferFrom(doctorUser, adminUser, 0)
+        ).to.be.revertedWith("Transfers are currently locked");
+      });
+    })
 
   //   describe("Burn related test", function() {
   //     it("Should not to allow burn the nft", async function () {
