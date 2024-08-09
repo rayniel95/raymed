@@ -129,21 +129,28 @@ describe("MedicalRecord", function () {
             });
         })
         describe("Update related test", function () {
-            it("Should allow update the nft uri", async function () {
+            it("Should allow to update the nft uri", async function () {
+                const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstMedicalRecord);
+
+                expect(
+                   await (medicalRecord.connect(doctorUser) as MedicalRecord).setTokenURI(0, '/test/medical/record')
+                ).to.not.be.reverted;
+                expect(
+                    await (medicalRecord.connect(patientUser) as MedicalRecord).tokenURI(0)
+                 ).to.be.equal('http://medical.record/test/medical/record');
+            });
+            it("Should not allow to update the nft uri", async function () {
                 const { medicalRecord, doctor, admin, deployer, superUser, adminUser, doctorUser, patientUser } = await loadFixture(mintFirstMedicalRecord);
 
                 await expect(
-                    (medicalRecord.connect(patientUser) as MedicalRecord).burn(0)
-                ).to.be.revertedWith("burn is loked");
+                    (medicalRecord.connect(patientUser) as MedicalRecord).setTokenURI(0, '/test/medical/record')
+                ).to.be.revertedWithCustomError(medicalRecord, "NftOwnerUnauthorizedAccount");
                 await expect(
-                    (medicalRecord.connect(doctorUser) as MedicalRecord).burn(0)
-                ).to.be.revertedWith("burn is loked");
+                    (medicalRecord.connect(adminUser) as MedicalRecord).setTokenURI(0, '/test/medical/record')
+                ).to.be.revertedWithCustomError(medicalRecord, "NftOwnerUnauthorizedAccount");
                 await expect(
-                    (medicalRecord.connect(adminUser) as MedicalRecord).burn(0)
-                ).to.be.revertedWith("burn is loked");
-                await expect(
-                    (medicalRecord.connect(superUser) as MedicalRecord).burn(0)
-                ).to.be.revertedWith("burn is loked");
+                    (medicalRecord.connect(superUser) as MedicalRecord).setTokenURI(0, '/test/medical/record')
+                ).to.be.revertedWithCustomError(medicalRecord, "NftOwnerUnauthorizedAccount");
             });
         })
     })
