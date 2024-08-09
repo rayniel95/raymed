@@ -6,7 +6,7 @@ import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import hre from "hardhat";
 import { token } from "../typechain-types/@openzeppelin/contracts";
-import { Patient } from "../typechain-types";
+import { Doctor, Patient } from "../typechain-types";
 
 describe("Doctor", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -64,10 +64,10 @@ describe("Doctor", function () {
   describe("Basic opertions", function () {
     describe("Mint related tests", function () {
       it("Should mint a nft", async function () {
-        const { doctor, owner, otherAccount } = await loadFixture(deployPatientFixture);
+        const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
 
-        expect(await doctor.safeMint(otherAccount)).to.not.be.reverted;
-        expect(await doctor.balanceOf(otherAccount)).to.equal(1);
+        expect(await doctor.connect(adminUser).safeMint(doctorUser, 'http://test.url')).to.not.be.reverted;
+        expect(await doctor.balanceOf(doctorUser)).to.equal(1);
       });
 
       it("Should not allow to mint a nft", async function () {

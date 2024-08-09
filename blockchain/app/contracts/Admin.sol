@@ -17,7 +17,7 @@ contract Admin is ERC721, ERC721Enumerable, ERC721Burnable, Ownable {
     function _baseURI() internal pure override returns (string memory) {
         return "inkjnjn";
     }
-
+    //FIXME - this do not have url to store data of the nft
     function safeMint(address to) public onlyOwner {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
