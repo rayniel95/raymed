@@ -48,16 +48,16 @@ describe("Doctor", function () {
   // }
 
   describe("Deployment", function () {
-    it("Should say contract owner is owner address", async function () {
-      const { doctor, owner } = await loadFixture(deployPatientFixture);
+    it("Should say owner contract address is admin contract address", async function () {
+      const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
 
-      expect(await doctor.owner()).to.equal(owner.address);
+      expect(await doctor.nft()).to.equal(await admin.getAddress());
     });
 
-    it("Should have symbol ATK", async function () {
-      const { doctor, owner } = await loadFixture(deployPatientFixture);
+    it("Should have symbol DTK", async function () {
+      const { doctor, admin, deployer, superUser, adminUser, doctorUser } = await loadFixture(deployDoctorFixture);
 
-      expect(await doctor.symbol()).to.equal("ATK");
+      expect(await doctor.symbol()).to.equal("DTK");
     });
   });
 
