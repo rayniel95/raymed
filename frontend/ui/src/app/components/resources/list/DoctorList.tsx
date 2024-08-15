@@ -1,6 +1,6 @@
 import { List, Datagrid, TextField, EmailField, NumberField, SelectField } from "react-admin";
 
-export const AdminList = () => (
+export const DoctorList = () => (
     <List>
         <Datagrid>
             <NumberField source="id" />
