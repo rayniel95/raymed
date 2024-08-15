@@ -27,7 +27,7 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         _setTokenURI(tokenId, uri);
         // approve(_ownerNftContractAddress, tokenId);
     }
-
+    //TODO - add events to methods
     function transferFrom(
         address from,
         address to,
