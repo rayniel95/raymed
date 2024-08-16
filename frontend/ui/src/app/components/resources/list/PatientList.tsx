@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, EmailField, NumberField, SelectField } from "react-admin";
+import { List, Datagrid, TextField, NumberField, SelectField } from "react-admin";
 
 export const PatientList = () => (
     <List>
@@ -8,8 +8,11 @@ export const PatientList = () => (
             <TextField source="secondName" />
             <TextField source="firstLastName" />
             <TextField source="secondLastName" />
-            <EmailField source="email" />
-            <TextField source="phone" />
+            <NumberField source="yearOfBirth" />
+            <NumberField source="monthOfBirth" />
+            <NumberField source="dayOfBirth" />
+            <SelectField source="ethnicity" />
+            <SelectField source="gender" />
         </Datagrid>
     </List>
 );
