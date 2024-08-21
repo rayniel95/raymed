@@ -1,5 +1,5 @@
 import { List, Datagrid, TextField, NumberField, SelectField } from "react-admin";
-
+//TODO - add relations between resources
 export const PatientList = () => (
     <List>
         <Datagrid>
