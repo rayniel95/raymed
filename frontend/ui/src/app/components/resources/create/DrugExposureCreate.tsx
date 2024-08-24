@@ -1,5 +1,6 @@
 import { SimpleForm, TextInput, NumberInput, Create } from "react-admin";
 //TODO - add relations between resources
+//TODO - check/validate components input
 export const DrugExposureCreate = () => (
     <Create>
         <SimpleForm>
