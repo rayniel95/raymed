@@ -1,8 +1,8 @@
-import { List, Datagrid, TextField, NumberField, SelectField } from "react-admin";
+import { List, Datagrid, TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
 //TODO - add relations between resources
-export const PatientList = () => (
-    <List>
-        <Datagrid>
+export const PatientShow = () => (
+    <Show>
+        <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="firstName" />
             <TextField source="secondName" />
@@ -13,6 +13,6 @@ export const PatientList = () => (
             <NumberField source="dayOfBirth" />
             <SelectField source="ethnicity" />
             <SelectField source="gender" />
-        </Datagrid>
-    </List>
+        </SimpleShowLayout>
+    </Show>
 );

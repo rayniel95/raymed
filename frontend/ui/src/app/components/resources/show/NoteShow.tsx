@@ -1,18 +1,13 @@
-import { List, Datagrid, TextField, NumberField, SelectField } from "react-admin";
+import { List, Datagrid, TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
 //TODO - add relations between resources
-export const NoteList = () => (
-    <List>
-        <Datagrid>
+export const NoteShow = () => (
+    <Show>
+        <SimpleShowLayout>
             <NumberField source="id" />
-            <TextField source="firstName" />
-            <TextField source="secondName" />
-            <TextField source="firstLastName" />
-            <TextField source="secondLastName" />
-            <NumberField source="yearOfBirth" />
-            <NumberField source="monthOfBirth" />
-            <NumberField source="dayOfBirth" />
-            <SelectField source="ethnicity" />
-            <SelectField source="gender" />
-        </Datagrid>
-    </List>
+            <NumberField source="patientIdentifier" />
+            <TextField source="title" />
+            <TextField source="date" />
+            <TextField source="text" />
+        </SimpleShowLayout>
+    </Show>
 );
