@@ -4,15 +4,10 @@ export const NoteList = () => (
     <List>
         <Datagrid>
             <NumberField source="id" />
-            <TextField source="firstName" />
-            <TextField source="secondName" />
-            <TextField source="firstLastName" />
-            <TextField source="secondLastName" />
-            <NumberField source="yearOfBirth" />
-            <NumberField source="monthOfBirth" />
-            <NumberField source="dayOfBirth" />
-            <SelectField source="ethnicity" />
-            <SelectField source="gender" />
+            <NumberField source="patientIdentifier" />
+            <TextField source="title" />
+            <TextField source="date" />
+            <TextField source="text" />
         </Datagrid>
     </List>
 );
