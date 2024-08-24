@@ -48,6 +48,9 @@ importers:
       eslint-config-next:
         specifier: 14.2.5
         version: 14.2.5(eslint@8.57.0)(typescript@5.5.3)
+      ra-data-local-storage:
+        specifier: ^5.1.2
+        version: 5.1.2(ra-core@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1))
       typescript:
         specifier: ^5
         version: 5.5.3
@@ -1156,6 +1159,9 @@ packages:
     resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
     engines: {node: '>=0.8.x'}
 
+  fakerest@4.1.1:
+    resolution: {integrity: sha512-GPF+MQQI4GqlSK0yYUjX/LmXyzAxmMMIPqoRz0rF8UVauJLs1gZEvGzhWCJD9RkLiQQK86wVm0A/Kig3xgChIQ==}
+
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
@@ -1798,8 +1804,18 @@ packages:
       react-router: ^6.22.0
       react-router-dom: ^6.22.0
 
+  ra-data-fakerest@5.1.2:
+    resolution: {integrity: sha512-GJol3vqOXxMIfTX4aEbkT6/BdMktdCE7Mj/lfMz0jyK7P1GKIuxQfa1XKhImb5P8prXYhraMM2fZ0FM3ksSQCg==}
+    peerDependencies:
+      ra-core: ^5.0.0
+
   ra-data-json-server@5.0.5:
     resolution: {integrity: sha512-27P7/k05ksStA+CYuE/Jb3cw0G5OBqrf03kUYB2F44SvnkC4/tacLBJ3imGS7mWT/yDEoFxrXaCr/+O4qN4ZAw==}
+
+  ra-data-local-storage@5.1.2:
+    resolution: {integrity: sha512-FtN8iE8NbnUJdFgWCgCMWpMQtJ9NjJ9InZAHpvkOeKqmGC2llipstHgIRzkudMhY3SpQSksqSDnrHBZEG4cidQ==}
+    peerDependencies:
+      ra-core: '*'
 
   ra-i18n-polyglot@5.0.5:
     resolution: {integrity: sha512-sJz+rn9X/XoJIz4TTXSL4xclfrZuRy0BxWmRmIej5o3AXGtQUdzitvV0eG2v27Yt71CvRGxZvar0uXr7jUZb5A==}
@@ -3565,7 +3581,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -3589,7 +3605,7 @@ snapshots:
       enhanced-resolve: 5.17.0
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.6
       is-core-module: 2.15.0
@@ -3611,7 +3627,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -3764,6 +3780,10 @@ snapshots:
   eventemitter3@5.0.1: {}
 
   events@3.3.0: {}
+
+  fakerest@4.1.1:
+    dependencies:
+      lodash: 4.17.21
 
   fast-deep-equal@3.1.3: {}
 
@@ -4408,6 +4428,11 @@ snapshots:
       react-router: 6.25.1(react@18.3.1)
       react-router-dom: 6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
+  ra-data-fakerest@5.1.2(ra-core@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      fakerest: 4.1.1
+      ra-core: 5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1)
+
   ra-data-json-server@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1):
     dependencies:
       query-string: 7.1.3
@@ -4418,6 +4443,12 @@ snapshots:
       - react-hook-form
       - react-router
       - react-router-dom
+
+  ra-data-local-storage@5.1.2(ra-core@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      lodash: 4.17.21
+      ra-core: 5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1)
+      ra-data-fakerest: 5.1.2(ra-core@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1))
 
   ra-i18n-polyglot@5.0.5(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.1(react@18.3.1))(react-router-dom@6.25.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.25.1(react@18.3.1))(react@18.3.1):
     dependencies:

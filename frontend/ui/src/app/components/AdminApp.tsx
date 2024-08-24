@@ -17,9 +17,9 @@ import { DrugExposureCreate } from "./resources/create/DrugExposureCreate";
 import { NoteList } from "./resources/list/NoteList";
 import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
+import dataProvider from "@/test/dataProvider";
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 
 const AdminApp = () => (
   <Admin dataProvider={dataProvider}>
