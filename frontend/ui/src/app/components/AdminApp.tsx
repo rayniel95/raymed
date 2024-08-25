@@ -1,6 +1,5 @@
 "use client"; // remove this line if you choose Pages Router
-import { Admin, Resource, ListGuesser, EditGuesser } from "react-admin";
-import jsonServerProvider from "ra-data-json-server";
+import { Admin, Resource, EditGuesser } from "react-admin";
 import { AdminList } from "./resources/list/AdminList";
 import { AdminShow } from "./resources/show/AdminShow";
 import { AdminCreate } from "./resources/create/AdminCreate";
@@ -18,11 +17,12 @@ import { NoteList } from "./resources/list/NoteList";
 import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
 import dataProvider from "@/test/dataProvider";
+import authProvider from "../auth/authProvider";
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
 
 const AdminApp = () => (
-  <Admin dataProvider={dataProvider}>
+  <Admin dataProvider={dataProvider} authProvider={authProvider}>
     <Resource
       name="admins"
       list={AdminList}
