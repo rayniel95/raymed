@@ -1,5 +1,6 @@
 "use client"; // remove this line if you choose Pages Router
-import { Admin, Resource, EditGuesser } from "react-admin";
+
+import { Admin, Resource, EditGuesser, CustomRoutes } from "react-admin";
 import { AdminList } from "./resources/list/AdminList";
 import { AdminShow } from "./resources/show/AdminShow";
 import { AdminCreate } from "./resources/create/AdminCreate";
@@ -18,6 +19,9 @@ import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
 import dataProvider from "@/test/dataProvider";
 import authProvider from "../auth/authProvider";
+import { Route } from "react-router-dom";
+import Login from "./Login";
+
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
 
@@ -57,6 +61,9 @@ const AdminApp = () => (
       create={NoteCreate}
       edit={EditGuesser}
     />
+    <CustomRoutes>
+      <Route path="/settings" element={<Login />} />
+    </CustomRoutes>
   </Admin>
 );
 
