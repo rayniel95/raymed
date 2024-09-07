@@ -22,12 +22,18 @@ import authProvider from "../auth/authProvider";
 import { Route } from "react-router-dom";
 import Login from "./Login";
 import Wallet from "./Wallet";
+import WalletConnectLayout from "./WalletConnectLayout";
 
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
 
 const AdminApp = () => (
-  <Admin dataProvider={dataProvider} authProvider={authProvider} loginPage={Login}>
+  <Admin 
+    dataProvider={dataProvider} 
+    authProvider={authProvider} 
+    // loginPage={Login} 
+    layout={WalletConnectLayout}
+  >
     <Resource
       name="admins"
       list={AdminList}
@@ -63,6 +69,7 @@ const AdminApp = () => (
       edit={EditGuesser}
     />
     <CustomRoutes>
+      //TODO - this must be a model with list and show
       <Route path="/history" element={<Wallet />} />
     </CustomRoutes>
   </Admin>
