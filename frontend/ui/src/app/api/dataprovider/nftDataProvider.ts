@@ -67,7 +67,32 @@ export default function nftDataProvider(
                 data: nfts[0]
             }
         }, // get a single record by id
-        getMany: (resource, params) => Promise, // get a list of records based on an array of ids
+        getMany: (resource, params) => {
+            return Promise.all(params.ids.map(async (id) => {
+                const nftsUris = getNftsForContract(
+                    publicClient!, 
+                    contractAddress, 
+                    1, 
+                    parseInt(id.toString())
+                )
+                const nfts = await Promise.all(nftsUris.map(async (uri) => {
+                    const metadata = await getMetadataForNft(await uri)
+                    return { //TODO - use the model here
+                        id: metadata.id,
+                        name: metadata.name,
+                        description: metadata.description,
+                        image: metadata.image,
+                        attributes: metadata.attributes,
+                        contractAddress: metadata.contractAddress,
+                        tokenId: metadata.tokenId,
+                        uri: uri
+                    }
+                }))
+                return {
+                    data: nfts[0]
+                }
+            }))
+        }, // get a list of records based on an array of ids
         getManyReference: (resource, params) => Promise, // get the records referenced to another record, e.g. comments for a post
         create: (resource, params) => Promise, // create a record
         update: (resource, params) => Promise, // update a record based on a patch
