@@ -44,8 +44,27 @@ export default function nftDataProvider(
             }
         }, // get a list of records based on sort, filter, and pagination
         getOne: async (resource, params) => {
+            const nftsUris = getNftsForContract(
+                publicClient!, 
+                contractAddress, 
+                1, 
+                parseInt(params.id.toString())
+            )
+            const nfts = await Promise.all(nftsUris.map(async (uri) => {
+                const metadata = await getMetadataForNft(await uri)
+                return { //TODO - use the model here
+                    id: metadata.id,
+                    name: metadata.name,
+                    description: metadata.description,
+                    image: metadata.image,
+                    attributes: metadata.attributes,
+                    contractAddress: metadata.contractAddress,
+                    tokenId: metadata.tokenId,
+                    uri: uri
+                }
+            }))
             return {
-                data: await nftClient.nft.getNftMetadata(contractAddress, params.id)
+                data: nfts[0]
             }
         }, // get a single record by id
         getMany: (resource, params) => Promise, // get a list of records based on an array of ids
