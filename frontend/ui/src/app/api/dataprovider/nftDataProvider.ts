@@ -1,26 +1,47 @@
 import { Alchemy } from "alchemy-sdk";
 import { DataProvider } from "react-admin";
-import { UseWalletClientReturnType } from "wagmi";
+import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
+import { getMetadataForNft, getNftsForContract, postMetadataForNft } from "./nftQueriesHelper";
+import { getContract, erc721Abi } from 'viem'
+import { HeliaLibp2p } from "helia";
+
 
 export default function nftDataProvider(
-    contractAddress: string,
-    // publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    contractAddress: '0x{string}',
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
-    nftClient: Alchemy
+    nftClient: Alchemy,
+    heliaNode: HeliaLibp2p
 ): DataProvider {
     return {
-        // publicClient,
+        publicClient,
         walletClient,
         contractAddress,
         nftClient,
+        heliaNode,
         getList: async (resource, params) => {
-            return await nftClient.nft.getNftsForContract(
+            const nftsUris = getNftsForContract(
+                publicClient!, 
                 contractAddress, 
-                {
-                    omitMetadata: false,
-                    pageSize: params.pagination!.perPage
-                }
+                params.pagination?.perPage!, 
+                params.pagination?.page!
             )
+            const nfts = await Promise.all(nftsUris.map(async (uri) => {
+                const metadata = await getMetadataForNft(await uri)
+                return { //TODO - use the model here
+                    id: metadata.id,
+                    name: metadata.name,
+                    description: metadata.description,
+                    image: metadata.image,
+                    attributes: metadata.attributes,
+                    contractAddress: metadata.contractAddress,
+                    tokenId: metadata.tokenId,
+                    uri: uri
+                }
+            }))
+            return {
+                data: nfts
+            }
         }, // get a list of records based on sort, filter, and pagination
         getOne: async (resource, params) => {
             return {
