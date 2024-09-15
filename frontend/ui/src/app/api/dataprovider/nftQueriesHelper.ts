@@ -21,3 +21,14 @@ export function getNftsForContract(
     return nftMetadataPerIndex
 }
 
+//TODO - union type of all models
+export async function getMetadataForNft(uri: string){
+    const resp = await verifiedFetch(uri, {
+        headers: {
+          accept: 'application/json'
+        }
+      })
+    const json = await resp.json()
+    return json
+}
+
