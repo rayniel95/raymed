@@ -1,5 +1,5 @@
-import { UseClientReturnType } from "wagmi";
 import { getContract, erc721Abi, Client } from 'viem'
+import { verifiedFetch } from '@helia/verified-fetch'
 
 
 export function getNftsForContract(
@@ -16,7 +16,7 @@ export function getNftsForContract(
 
     const nftMetadataPerIndex = [];
     for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
-        nftMetadataPerIndex.push(contract.read.tokenByIndex([BigInt(i)]))
+        nftMetadataPerIndex.push(contract.read.tokenURI([BigInt(i)]))
     }
     return nftMetadataPerIndex
 }
