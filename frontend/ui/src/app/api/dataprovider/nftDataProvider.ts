@@ -94,7 +94,24 @@ export default function nftDataProvider(
             }))
         }, // get a list of records based on an array of ids
         getManyReference: (resource, params) => Promise, // get the records referenced to another record, e.g. comments for a post
-        create: (resource, params) => Promise, // create a record
+        create: async(resource, params) => {
+            const uri = postMetadataForNft(
+                params.data, 
+                heliaNode
+            )
+            const contract = getContract({
+                address: contractAddress,
+                abi: erc721Abi,
+                client: publicClient!
+            })
+
+            return contract.write.safeMint(
+                params.data.name, 
+                params.data.description, 
+                params.data.image, 
+                params.data.attributes
+            )
+        }, // create a record
         update: (resource, params) => Promise, // update a record based on a patch
         updateMany: (resource, params) => Promise, // update a list of records based on an array of ids and a common patch
         delete: (resource, params) => Promise, // delete a record by id
