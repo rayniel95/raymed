@@ -1,5 +1,6 @@
 import { SimpleForm, Edit, TextInput, NumberInput } from "react-admin";
 //TODO - add relations between resources
+//TODO - add models to improve type safety and that return the components to draw the fields
 export const DrugExposureEdit = () => (
     <Edit>
         <SimpleForm>

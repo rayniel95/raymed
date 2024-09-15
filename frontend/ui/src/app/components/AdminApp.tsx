@@ -2,7 +2,7 @@
 
 import { Admin, Resource, EditGuesser, CustomRoutes } from "react-admin";
 import { AdminList } from "./resources/list/AdminList";
-import { AdminShow } from "./resources/show/AdminShow";
+import AdminShow from "./resources/show/AdminShow";
 import { AdminCreate } from "./resources/create/AdminCreate";
 import { DoctorList } from "./resources/list/DoctorList";
 import { DoctorShow } from "./resources/show/DoctorShow";
@@ -23,56 +23,70 @@ import { Route } from "react-router-dom";
 import Login from "./Login";
 import Wallet from "./Wallet";
 import WalletConnectLayout from "./WalletConnectLayout";
+import { useClient, useWalletClient } from "wagmi";
+import { Network, Alchemy } from "alchemy-sdk";
 
+// Optional Config object, but defaults to demo api-key and eth-mainnet.
+const settings = {
+  apiKey: "demo", // Replace with your Alchemy API Key.
+  network: Network.ETH_SEPOLIA, // Replace with your network.
+};
+
+const alchemy = new Alchemy(settings);
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
+//TODO - maybe merge the react admin react query client with wagmi react query client
+const AdminApp = () => {
+  const publicClient = useClient();
+  const walletClient = useWalletClient();
 
-const AdminApp = () => (
-  <Admin 
-    dataProvider={dataProvider} 
-    authProvider={authProvider} 
-    // loginPage={Login} 
-    layout={WalletConnectLayout}
-  >
-    <Resource
-      name="admins"
-      list={AdminList}
-      show={AdminShow}
-      create={AdminCreate}
-      recordRepresentation="name"
-    />
-    <Resource
-      name="doctors"
-      list={DoctorList}
-      show={DoctorShow}
-      create={DoctorCreate}
-      recordRepresentation="title"
-    />
-    <Resource
-      name="patients"
-      list={PatientList}
-      show={PatientShow}
-      create={PatientCreate}
-    />
-    <Resource
-      name="drugExposures"
-      list={DrugExposureList}
-      show={DrugExposureShow}
-      create={DrugExposureCreate}
-      edit={DrugExposureEdit}
-    />
-    <Resource
-      name="notes"
-      list={NoteList}
-      show={NoteShow}
-      create={NoteCreate}
-      edit={EditGuesser}
-    />
-    <CustomRoutes>
+  (
+    <Admin
+      dataProvider={dataProvider}
+      authProvider={authProvider}
+      // loginPage={Login} 
+      layout={WalletConnectLayout}
+    >
+      <Resource
+        name="admins"
+        list={AdminList}
+        show={AdminShow}
+        create={AdminCreate}
+        recordRepresentation="name"
+      />
+      <Resource
+        name="doctors"
+        list={DoctorList}
+        show={DoctorShow}
+        create={DoctorCreate}
+        recordRepresentation="title"
+      />
+      <Resource
+        name="patients"
+        list={PatientList}
+        show={PatientShow}
+        create={PatientCreate}
+      />
+      <Resource
+        name="drugExposures"
+        list={DrugExposureList}
+        show={DrugExposureShow}
+        create={DrugExposureCreate}
+        edit={DrugExposureEdit}
+      />
+      <Resource
+        name="notes"
+        list={NoteList}
+        show={NoteShow}
+        create={NoteCreate}
+        edit={EditGuesser}
+      />
+      <CustomRoutes>
       //TODO - this must be a model with list and show
-      <Route path="/history" element={<Wallet />} />
-    </CustomRoutes>
-  </Admin>
-);
+        <Route path="/history" element={<Wallet />} />
+      </CustomRoutes>
+    </Admin>
+  )
+};
 
 export default AdminApp;
