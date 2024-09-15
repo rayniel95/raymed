@@ -1,5 +1,7 @@
 import { getContract, erc721Abi, Client } from 'viem'
 import { verifiedFetch } from '@helia/verified-fetch'
+import { HeliaLibp2p } from 'helia';
+import { unixfs } from '@helia/unixfs'
 
 
 export function getNftsForContract(
@@ -32,3 +34,15 @@ export async function getMetadataForNft(uri: string){
     return json
 }
 
+export async function postMetadataForNft(
+    metadata: object, 
+    heliaNode: HeliaLibp2p
+){
+    const fs = unixfs(heliaNode)
+    // we will use this TextEncoder to turn strings into Uint8Arrays
+    const encoder = new TextEncoder()
+    // add the bytes to your node and receive a unique content identifier
+    const cid = await fs.addBytes(encoder.encode(JSON.stringify(metadata)))
+
+    return cid.toString()
+}
