@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, NumberField, SelectField, Create, SimpleForm, NumberInput, TextInput, SelectInput } from "react-admin";
+import { Create, SimpleForm, NumberInput, TextInput, SelectInput } from "react-admin";
 //TODO - add relations between resources
 export const PatientCreate = () => (
     <Create>
