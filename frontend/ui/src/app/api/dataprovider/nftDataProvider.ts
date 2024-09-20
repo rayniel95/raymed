@@ -151,5 +151,15 @@ export default function nftDataProvider(
                 await uri
             )
         }, // update a record based on a patch
+        delete: async(resource, params) => {
+            const contract = getContract({
+                address: contractAddress,
+                abi: GenericNft.abi,
+                client: walletClient.data!
+            })
+            return await contract.write.burn(
+                [parseInt(params.id.toString())]
+            )
+        }, // delete a record by id
     }
 }
