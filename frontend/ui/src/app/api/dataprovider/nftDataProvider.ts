@@ -93,7 +93,33 @@ export default function nftDataProvider(
                 }
             }))
         }, // get a list of records based on an array of ids
-        getManyReference: (resource, params) => Promise, // get the records referenced to another record, e.g. comments for a post
+        getManyReference: async(resource, params) => {
+            //NOTE - search for the owner of params.id in the current nft contract
+            //and query the contract in resource for the nfts with the same owner
+            const contract = getContract({
+                address: contractAddress,
+                abi: GenericNft.abi,
+                client: publicClient!
+            })
+
+            const ownerAddress = await contract.read.ownerOf([BigInt(params.id)]);
+            const contractToQuery = getContract({
+                address: resource as '0x{string}',
+                abi: erc721Abi,
+                client: publicClient!
+            })
+
+            const totalSupply = await contractToQuery.read.totalSupply();
+            const nfts = [];
+            for (let i = 0; i < totalSupply; i++) {
+                nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
+            }
+            const nftsOwners = await Promise.all(nfts);
+            const nftsOfOnwer = nftsOwners.filter(owner => owner === ownerAddress)
+            return {
+                data: nftsOfOnwer
+            }
+        }, // get the records referenced to another record, e.g. comments for a post
         create: async(resource, params) => {
             const uri = postMetadataForNft(
                 params.data, 
