@@ -1,12 +1,13 @@
 import { Alchemy } from "alchemy-sdk";
-import { DataProvider } from "react-admin";
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { getMetadataForNft, getNftsForContract, postMetadataForNft } from "./nftQueriesHelper";
+import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi } from 'viem'
 import { HeliaLibp2p } from "helia";
+import GenericNft from "./GenericNft.json";
 
 
-export default function nftDataProvider(
+export default function nftDataProvider<T extends RaRecord>(
     contractAddress: '0x{string}',
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
@@ -19,31 +20,41 @@ export default function nftDataProvider(
         contractAddress,
         nftClient,
         heliaNode,
-        getList: async (resource, params) => {
-            const nftsUris = getNftsForContract(
+        getList: async <T1 extends RaRecord>(
+            resource: string, 
+            params: GetListParams & QueryFunctionContext
+        ) => {
+            const contract = getContract({
+                address: contractAddress,
+                abi: erc721Abi,
+                client: publicClient!
+            })
+
+            const nftsUris = getNftsUriForContract(
                 publicClient!, 
                 contractAddress, 
                 params.pagination?.perPage!, 
-                params.pagination?.page!
+                params.pagination?.page! - 1
             )
             const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                const metadata = await getMetadataForNft(await uri)
-                return { //TODO - use the model here
-                    id: metadata.id,
-                    name: metadata.name,
-                    description: metadata.description,
-                    image: metadata.image,
-                    attributes: metadata.attributes,
-                    contractAddress: metadata.contractAddress,
-                    tokenId: metadata.tokenId,
-                    uri: uri
-                }
+                const metadata = await getMetadataForNft<T1>(await uri)
+                return metadata;
             }))
+            const totalSupply = await contract.read.totalSupply();
+
             return {
-                data: nfts
+                data: nfts,
+                total: Number(totalSupply),
+                pageInfo: {
+                    hasNextPage: params.pagination?.page! < totalSupply,
+                    hasPreviousPage: params.pagination?.page! > 1
+                }
             }
         }, // get a list of records based on sort, filter, and pagination
-        getOne: async (resource, params) => {
+        getOne: async <T1 extends RaRecord>(
+            resource: string, 
+            params:GetOneParams
+        ) => {
             const nftsUris = getNftsUriForContract(
                 publicClient!, 
                 contractAddress, 
@@ -51,24 +62,18 @@ export default function nftDataProvider(
                 parseInt(params.id.toString())
             )
             const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                const metadata = await getMetadataForNft(await uri)
-                return { //TODO - use the model here
-                    id: metadata.id,
-                    name: metadata.name,
-                    description: metadata.description,
-                    image: metadata.image,
-                    attributes: metadata.attributes,
-                    contractAddress: metadata.contractAddress,
-                    tokenId: metadata.tokenId,
-                    uri: uri
-                }
+                const metadata = await getMetadataForNft<T1>(await uri)
+                return metadata
             }))
             return {
                 data: nfts[0]
             }
         }, // get a single record by id
-        getMany: async(resource, params) => {
-            return Promise.all(params.ids.map(async (id) => {
+        getMany: async <T1 extends RaRecord>(
+            resource: string, 
+            params: GetManyParams
+        ) => {
+            const nfts = await Promise.all(params.ids.map(async (id) => {
                 const nftsUris = getNftsUriForContract(
                     publicClient!, 
                     contractAddress, 
@@ -76,24 +81,19 @@ export default function nftDataProvider(
                     parseInt(id.toString())
                 )
                 const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                    const metadata = await getMetadataForNft(await uri)
-                    return { //TODO - use the model here
-                        id: metadata.id,
-                        name: metadata.name,
-                        description: metadata.description,
-                        image: metadata.image,
-                        attributes: metadata.attributes,
-                        contractAddress: metadata.contractAddress,
-                        tokenId: metadata.tokenId,
-                        uri: uri
-                    }
+                    const metadata = await getMetadataForNft<T1>(await uri)
+                    return metadata
                 }))
-                return {
-                    data: nfts[0]
-                }
+                return nfts[0]
             }))
+            return{
+                data: nfts
+            }
         }, // get a list of records based on an array of ids
-        getManyReference: async(resource, params) => {
+        getManyReference: async<T1 extends RaRecord>(
+            resource: string,
+            params: GetManyReferenceParams
+        ) => {
             //NOTE - search for the owner of params.id in the current nft contract
             //and query the contract in resource for the nfts with the same owner
             const contract = getContract({
@@ -115,12 +115,30 @@ export default function nftDataProvider(
                 nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
             }
             const nftsOwners = await Promise.all(nfts);
-            const nftsOfOnwer = nftsOwners.filter(owner => owner === ownerAddress)
+            const nftsOfOnwer = [];
+            for(let i = 0; i < nftsOwners.length; i++){
+                if (nftsOwners[i] === ownerAddress) {
+                    const nft = async() => {
+                        const nftsUris = getNftsUriForContract(
+                            publicClient!,
+                            resource as '0x{string}',
+                            1,
+                            i
+                        )
+                        const metadata = await getMetadataForNft<T1>(await nftsUris[0])
+                        return metadata
+                    }
+                    nftsOfOnwer.push(nft())
+                }
+            }
             return {
-                data: nftsOfOnwer
+                data: await Promise.all(nftsOfOnwer)
             }
         }, // get the records referenced to another record, e.g. comments for a post
-        create: async(resource, params) => {
+        create: async <T1 extends RaRecord>(
+            resource: string,
+            params: CreateParams<T1>
+        ) => {
             const uri = postMetadataForNft(
                 params.data, 
                 heliaNode
@@ -131,14 +149,21 @@ export default function nftDataProvider(
                 client: walletClient.data!
             })
 
-            return await contract.write.safeMint(
-                params.data.to,
+            await contract.write.safeMint(
+                params.data.owner,
                 await uri
             )
+
+            return {
+                data: params.data
+            }
         }, // create a record
-        update: async(resource, params) =>{
+        update: async <T1 extends RaRecord>(
+            resource: string, 
+            params: UpdateParams<T1>
+        ) =>{
             const uri = postMetadataForNft(
-                params.data, 
+                {...params.data, ...params.previousData},
                 heliaNode
             )
             const contract = getContract({
@@ -146,35 +171,52 @@ export default function nftDataProvider(
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
-            return await contract.write.setTokenURI(
-                params.id,
+            await contract.write.setTokenURI(
+                [params.id.toString()],
                 await uri
             )
+
+            return {
+                data: {...params.data, ...params.previousData}
+            }
         }, // update a record based on a patch
         updateMany: async(resource, params) => {
             return Promise.resolve()
         }, // update a list of records based on an array of ids and a common patch
-        delete: async(resource, params) => {
+        delete: async <T1 extends RaRecord>(
+            resource: string, 
+            params: DeleteParams
+        ) => {
             const contract = getContract({
                 address: contractAddress,
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
-            return await contract.write.burn(
+            await contract.write.burn(
                 [parseInt(params.id.toString())]
             )
+
+            return {
+                data: params.previousData
+            }
         }, // delete a record by id
-        deleteMany: async(resource, params) => {
+        deleteMany: async <T1 extends RaRecord>(
+            resource: string, 
+            params: DeleteManyParams
+        ) => {
             const contract = getContract({
                 address: contractAddress,
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
-            Promise.all(params.ids.map(async (id) => {
+            await Promise.all(params.ids.map(async (id) => {
                 return await contract.write.burn(
                     [parseInt(id.toString())]
                 )
             }))
+            return{
+                data: params.ids
+            }
         }, // delete a list of records based on an array of ids
     }
 }
