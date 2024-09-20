@@ -2,6 +2,7 @@ import { getContract, erc721Abi, Client } from 'viem'
 import { verifiedFetch } from '@helia/verified-fetch'
 import { HeliaLibp2p } from 'helia';
 import { unixfs } from '@helia/unixfs'
+import { RaRecord } from 'react-admin';
 
 
 export function getNftsUriForContract(
@@ -24,7 +25,7 @@ export function getNftsUriForContract(
 }
 
 //TODO - union type of all models
-export async function getMetadataForNft(uri: string){
+export async function getMetadataForNft<T extends RaRecord>(uri: string){
     const resp = await verifiedFetch(uri, {
         headers: {
           accept: 'application/json'
