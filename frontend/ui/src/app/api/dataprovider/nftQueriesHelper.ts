@@ -4,7 +4,7 @@ import { HeliaLibp2p } from 'helia';
 import { unixfs } from '@helia/unixfs'
 
 
-export function getNftsForContract(
+export function getNftsUriForContract(
     client: Client, 
     contractAddress: '0x{string}', 
     pageSize: number, 
