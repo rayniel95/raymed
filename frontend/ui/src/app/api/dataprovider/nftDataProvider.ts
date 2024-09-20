@@ -67,9 +67,9 @@ export default function nftDataProvider(
                 data: nfts[0]
             }
         }, // get a single record by id
-        getMany: (resource, params) => {
+        getMany: async(resource, params) => {
             return Promise.all(params.ids.map(async (id) => {
-                const nftsUris = getNftsForContract(
+                const nftsUris = getNftsUriForContract(
                     publicClient!, 
                     contractAddress, 
                     1, 
@@ -127,15 +127,13 @@ export default function nftDataProvider(
             )
             const contract = getContract({
                 address: contractAddress,
-                abi: erc721Abi,
-                client: publicClient!
+                abi: GenericNft.abi,
+                client: walletClient.data!
             })
 
-            return contract.write.safeMint(
-                params.data.name, 
-                params.data.description, 
-                params.data.image, 
-                params.data.attributes
+            return await contract.write.safeMint(
+                params.data.to,
+                await uri
             )
         }, // create a record
         update: (resource, params) => Promise, // update a record based on a patch
