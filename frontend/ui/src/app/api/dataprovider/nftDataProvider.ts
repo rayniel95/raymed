@@ -136,9 +136,20 @@ export default function nftDataProvider(
                 await uri
             )
         }, // create a record
-        update: (resource, params) => Promise, // update a record based on a patch
-        updateMany: (resource, params) => Promise, // update a list of records based on an array of ids and a common patch
-        delete: (resource, params) => Promise, // delete a record by id
-        deleteMany: (resource, params) => Promise, // delete a list of records based on an array of ids
+        update: async(resource, params) =>{
+            const uri = postMetadataForNft(
+                params.data, 
+                heliaNode
+            )
+            const contract = getContract({
+                address: contractAddress,
+                abi: GenericNft.abi,
+                client: walletClient.data!
+            })
+            return await contract.write.setTokenURI(
+                params.id,
+                await uri
+            )
+        }, // update a record based on a patch
     }
 }
