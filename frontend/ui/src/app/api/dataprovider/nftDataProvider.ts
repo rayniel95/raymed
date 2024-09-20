@@ -44,7 +44,7 @@ export default function nftDataProvider(
             }
         }, // get a list of records based on sort, filter, and pagination
         getOne: async (resource, params) => {
-            const nftsUris = getNftsForContract(
+            const nftsUris = getNftsUriForContract(
                 publicClient!, 
                 contractAddress, 
                 1, 
@@ -151,6 +151,9 @@ export default function nftDataProvider(
                 await uri
             )
         }, // update a record based on a patch
+        updateMany: async(resource, params) => {
+            return Promise.resolve()
+        }, // update a list of records based on an array of ids and a common patch
         delete: async(resource, params) => {
             const contract = getContract({
                 address: contractAddress,
@@ -161,5 +164,17 @@ export default function nftDataProvider(
                 [parseInt(params.id.toString())]
             )
         }, // delete a record by id
+        deleteMany: async(resource, params) => {
+            const contract = getContract({
+                address: contractAddress,
+                abi: GenericNft.abi,
+                client: walletClient.data!
+            })
+            Promise.all(params.ids.map(async (id) => {
+                return await contract.write.burn(
+                    [parseInt(id.toString())]
+                )
+            }))
+        }, // delete a list of records based on an array of ids
     }
 }
