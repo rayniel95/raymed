@@ -25,7 +25,7 @@ export function getNftsUriForContract(
 }
 
 //TODO - union type of all models
-export async function getMetadataForNft<T extends RaRecord>(uri: string){
+export async function getMetadataForNft<T extends RaRecord>(uri: string): Promise<T> {
     const resp = await verifiedFetch(uri, {
         headers: {
           accept: 'application/json'
