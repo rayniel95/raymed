@@ -1,10 +1,12 @@
 import { Alchemy } from "alchemy-sdk";
-import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateParams } from "react-admin";
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
 import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi } from 'viem'
 import { HeliaLibp2p } from "helia";
 import GenericNft from "./GenericNft.json";
+import { Update } from "next/dist/build/swc";
+import { BaseModel } from "@/models/base";
 
 
 export default function nftDataProvider<T extends RaRecord>(
@@ -135,7 +137,7 @@ export default function nftDataProvider<T extends RaRecord>(
                 data: await Promise.all(nftsOfOnwer)
             }
         }, // get the records referenced to another record, e.g. comments for a post
-        create: async <T1 extends RaRecord>(
+        create: async <T1 extends BaseModel>(
             resource: string,
             params: CreateParams<T1>
         ) => {
@@ -150,12 +152,12 @@ export default function nftDataProvider<T extends RaRecord>(
             })
 
             await contract.write.safeMint(
-                params.data.owner,
+                [params.data.owner],
                 await uri
             )
 
             return {
-                data: params.data
+                data: params.data as T1
             }
         }, // create a record
         update: async <T1 extends RaRecord>(
