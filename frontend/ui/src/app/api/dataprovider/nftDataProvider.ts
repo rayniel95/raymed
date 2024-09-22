@@ -182,8 +182,13 @@ export default function nftDataProvider<T extends RaRecord>(
                 data: {...params.previousData, ...params.data}
             }
         }, // update a record based on a patch
-        updateMany: async(resource, params) => {
-            return Promise.resolve()
+        updateMany: async <T1 extends RaRecord>(
+            resource: string, 
+            params: UpdateManyParams<T1>
+        ) => {
+            return {
+                data: params.ids
+            }
         }, // update a list of records based on an array of ids and a common patch
         delete: async <T1 extends RaRecord>(
             resource: string, 
