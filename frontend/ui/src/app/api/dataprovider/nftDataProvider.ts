@@ -1,40 +1,36 @@
-import { Alchemy } from "alchemy-sdk";
 import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
 import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi } from 'viem'
 import { HeliaLibp2p } from "helia";
 import GenericNft from "./GenericNft.json";
-import { Update } from "next/dist/build/swc";
-import { BaseModel } from "@/models/base";
+import { BaseModel } from "@/app/models/base";
 
 
 export default function nftDataProvider<T extends RaRecord>(
-    contractAddress: '0x{string}',
+    mapper: Record<string, "0x{string}">,
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
-    nftClient: Alchemy,
     heliaNode: HeliaLibp2p
 ): DataProvider {
     return {
         publicClient,
         walletClient,
-        contractAddress,
-        nftClient,
+        mapper,
         heliaNode,
         getList: async <T1 extends RaRecord>(
             resource: string, 
             params: GetListParams & QueryFunctionContext
         ) => {
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: erc721Abi,
                 client: publicClient!
             })
 
             const nftsUris = getNftsUriForContract(
                 publicClient!, 
-                contractAddress, 
+                mapper[resource], 
                 params.pagination?.perPage!, 
                 params.pagination?.page! - 1
             )
@@ -59,7 +55,7 @@ export default function nftDataProvider<T extends RaRecord>(
         ) => {
             const nftsUris = getNftsUriForContract(
                 publicClient!, 
-                contractAddress, 
+                mapper[resource], 
                 1, 
                 parseInt(params.id.toString())
             )
@@ -78,7 +74,7 @@ export default function nftDataProvider<T extends RaRecord>(
             const nfts = await Promise.all(params.ids.map(async (id) => {
                 const nftsUris = getNftsUriForContract(
                     publicClient!, 
-                    contractAddress, 
+                    mapper[resource], 
                     1, 
                     parseInt(id.toString())
                 )
@@ -99,7 +95,7 @@ export default function nftDataProvider<T extends RaRecord>(
             //NOTE - search for the owner of params.id in the current nft contract
             //and query the contract in resource for the nfts with the same owner
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: GenericNft.abi,
                 client: publicClient!
             })
@@ -146,7 +142,7 @@ export default function nftDataProvider<T extends RaRecord>(
                 heliaNode
             )
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
@@ -169,7 +165,7 @@ export default function nftDataProvider<T extends RaRecord>(
                 heliaNode
             )
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
@@ -186,6 +182,8 @@ export default function nftDataProvider<T extends RaRecord>(
             resource: string, 
             params: UpdateManyParams<T1>
         ) => {
+            //TODO - return an error here. this is not supported because
+            //the contract does not support batch updates
             return {
                 data: params.ids
             }
@@ -195,7 +193,7 @@ export default function nftDataProvider<T extends RaRecord>(
             params: DeleteParams
         ) => {
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
@@ -211,8 +209,10 @@ export default function nftDataProvider<T extends RaRecord>(
             resource: string, 
             params: DeleteManyParams
         ) => {
+            //TODO - return an error here. this is not supported because
+            //the contract does not support batch updates
             const contract = getContract({
-                address: contractAddress,
+                address: mapper[resource],
                 abi: GenericNft.abi,
                 client: walletClient.data!
             })
