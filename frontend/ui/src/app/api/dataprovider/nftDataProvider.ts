@@ -179,7 +179,7 @@ export default function nftDataProvider<T extends RaRecord>(
             )
 
             return {
-                data: {...params.data, ...params.previousData}
+                data: {...params.previousData, ...params.data}
             }
         }, // update a record based on a patch
         updateMany: async(resource, params) => {
