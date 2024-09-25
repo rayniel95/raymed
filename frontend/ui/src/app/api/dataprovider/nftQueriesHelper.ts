@@ -1,6 +1,6 @@
 import { getContract, erc721Abi, Client } from 'viem'
 import { verifiedFetch } from '@helia/verified-fetch'
-import { HeliaLibp2p } from 'helia';
+import { Helia } from 'helia';
 import { unixfs } from '@helia/unixfs'
 import { RaRecord } from 'react-admin';
 
@@ -37,7 +37,7 @@ export async function getMetadataForNft<T extends RaRecord>(uri: string): Promis
 
 export async function postMetadataForNft(
     metadata: object, 
-    heliaNode: HeliaLibp2p
+    heliaNode: Helia
 ){
     const fs = unixfs(heliaNode)
     // we will use this TextEncoder to turn strings into Uint8Arrays

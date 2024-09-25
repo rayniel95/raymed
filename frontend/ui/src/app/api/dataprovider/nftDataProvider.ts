@@ -2,16 +2,16 @@ import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListPara
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
 import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi } from 'viem'
-import { HeliaLibp2p } from "helia";
+import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
 import { BaseModel } from "@/app/models/base";
 
 
-export default function nftDataProvider<T extends RaRecord>(
+export default function nftDataProvider(
     mapper: Record<string, "0x{string}">,
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
-    heliaNode: HeliaLibp2p
+    heliaNode: Helia
 ): DataProvider {
     return {
         publicClient,
