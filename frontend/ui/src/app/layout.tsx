@@ -20,7 +20,7 @@ import {
 
 const config = getDefaultConfig({
   appName: 'raymed',
-  projectId: 'YOUR_PROJECT_ID',
+  projectId: '245adb7e4c59f87b71e4c4d836af636a',
   chains: [sepolia],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
