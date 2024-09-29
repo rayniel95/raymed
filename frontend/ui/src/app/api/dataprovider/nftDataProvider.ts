@@ -28,18 +28,23 @@ export default function nftDataProvider(
                 client: publicClient!
             })
 
-            const nftsUris = getNftsUriForContract(
-                publicClient!, 
-                mapper[resource], 
-                params.pagination?.perPage!, 
-                params.pagination?.page! - 1
-            )
-            const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                const metadata = await getMetadataForNft<T1>(await uri)
-                return metadata;
-            }))
-            const totalSupply = await contract.read.totalSupply();
-
+            let totalSupply = BigInt(0);
+            let nfts: T1[] = [];
+            try{
+                const nftsUris = getNftsUriForContract(
+                    publicClient!, 
+                    mapper[resource], 
+                    params.pagination?.perPage!, 
+                    params.pagination?.page! - 1
+                )
+                nfts = await Promise.all(nftsUris.map(async (uri) => {
+                    const metadata = await getMetadataForNft<T1>(await uri)
+                    return metadata;
+                }))
+                totalSupply = await contract.read.totalSupply();
+            } catch (e) {
+                console.log(e)
+            }
             return {
                 data: nfts,
                 total: Number(totalSupply),
