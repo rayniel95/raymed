@@ -28,6 +28,7 @@ import nftDataProvider from "../api/dataprovider/nftDataProvider";
 import { createHelia, Helia } from "helia";
 import { mapper } from "../api/dataprovider/pathToContractMapper";
 import { useEffect, useState } from "react";
+import { Routes } from "../api/routes";
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 // const settings = {
@@ -43,7 +44,7 @@ const AdminApp = () => {
   const publicClient = useClient();
   const walletClient = useWalletClient();
   const [helia, setHelia] = useState<Helia | null>(null)
-
+  //TODO - move helia loading to an upper component to avoid re-renders when the wallet is connected
   useEffect(() => {
     const init = async () => {
       if (helia) return
@@ -73,34 +74,34 @@ const AdminApp = () => {
       layout={WalletConnectLayout}
     >
       <Resource
-        name="admins"
+        name={Routes.AdminRoute.toString()}
         list={AdminList}
         show={AdminShow}
         create={AdminCreate}
       // recordRepresentation="name"
       />
       <Resource
-        name="doctors"
+        name={Routes.DoctorRoute.toString()}
         list={DoctorList}
         show={DoctorShow}
         create={DoctorCreate}
       // recordRepresentation="title"
       />
       <Resource
-        name="patients"
+        name={Routes.PatientRoute.toString()}
         list={PatientList}
         show={PatientShow}
         create={PatientCreate}
       />
       <Resource
-        name="drugExposures"
+        name={Routes.DrugExposureRoute.toString()}
         list={DrugExposureList}
         show={DrugExposureShow}
         create={DrugExposureCreate}
         edit={DrugExposureEdit}
       />
       <Resource
-        name="notes"
+        name={Routes.NoteRoute.toString()}
         list={NoteList}
         show={NoteShow}
         create={NoteCreate}
