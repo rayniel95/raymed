@@ -1,4 +1,4 @@
-import { getContract, erc721Abi, Client } from 'viem'
+import { getContract, erc721Abi, Client, ContractFunctionExecutionError, ContractFunctionZeroDataError } from 'viem'
 import { verifiedFetch } from '@helia/verified-fetch'
 import { Helia } from 'helia';
 import { unixfs } from '@helia/unixfs'
@@ -18,10 +18,18 @@ export function getNftsUriForContract(
     })
 
     const nftMetadataPerIndex = [];
-    for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
-        nftMetadataPerIndex.push(contract.read.tokenURI([BigInt(i)]))
+    try {
+        for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
+            nftMetadataPerIndex.push(contract.read.tokenURI([BigInt(i)]))
+        }
+        return nftMetadataPerIndex
+    } catch (error: any) {
+        console.log(error.message)
+        if (error instanceof ContractFunctionZeroDataError) {
+            return []
+        }
+        throw error;
     }
-    return nftMetadataPerIndex
 }
 
 //TODO - union type of all models

@@ -43,6 +43,7 @@ export default function nftDataProvider(
                 }))
                 totalSupply = await contract.read.totalSupply();
             } catch (e) {
+                //TODO - show pretty error message in the UI
                 console.log(e)
             }
             return {
