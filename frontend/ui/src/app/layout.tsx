@@ -5,26 +5,16 @@
 
 import '@rainbow-me/rainbowkit/styles.css';
 import {
-  getDefaultConfig,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  localhost,
-  sepolia
-} from 'wagmi/chains';
-import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
+import { config } from './blockchain/config';
+import HeliaContextProvider from './contexts/HeliaProvider';
 
-
-const config = getDefaultConfig({
-  appName: 'raymed',
-  projectId: '245adb7e4c59f87b71e4c4d836af636a',
-  chains: [sepolia, localhost],
-  ssr: false, // If your dApp uses server side rendering (SSR)
-});
 
 const queryClient = new QueryClient();
 
@@ -39,7 +29,9 @@ export default function RootLayout({
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider>
-              {children}
+              <HeliaContextProvider>
+                {children}
+              </HeliaContextProvider>
             </RainbowKitProvider>
           </QueryClientProvider>
         </WagmiProvider>
