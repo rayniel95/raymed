@@ -3,7 +3,7 @@ import { TextField, EmailField, NumberField, Show, SimpleShowLayout } from "reac
 export const AdminShow = () => (
     <Show>
         <SimpleShowLayout>
-            <NumberField source="id" />
+            <NumberField source="owner" />
             <TextField source="firstName" />
             <TextField source="secondName" />
             <TextField source="firstLastName" />
