@@ -170,9 +170,8 @@ export default function nftDataProvider(
                 client: walletClient.data!
             })
 
-            await contract.write.safeMint(
-                [params.data.owner],
-                await uri
+            const mintResult = await contract.write.safeMint(
+                [params.data.owner,await uri]
             )
 
             return {
