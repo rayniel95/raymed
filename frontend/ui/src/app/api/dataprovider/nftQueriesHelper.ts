@@ -3,6 +3,8 @@ import { verifiedFetch } from '@helia/verified-fetch'
 import { Helia } from 'helia';
 import { unixfs } from '@helia/unixfs'
 import { RaRecord } from 'react-admin';
+import { CID } from 'multiformats/cid';
+import { json } from '@helia/json'
 
 
 export function getNftsUriForContract(
@@ -33,14 +35,35 @@ export function getNftsUriForContract(
 }
 
 //TODO - union type of all models
-export async function getMetadataForNft<T extends RaRecord>(uri: string): Promise<T> {
-    const resp = await verifiedFetch(uri, {
-        headers: {
-          accept: 'application/json'
-        }
-      })
-    const json = await resp.json()
-    return json
+// export async function getMetadataForNft<T extends RaRecord>(uri: string): Promise<T> {
+//     const resp = await verifiedFetch(uri, {
+//         headers: {
+//             accept: 'application/json'
+//         },
+//     })
+//     const json = await resp.json()
+//     console.log(json)
+//     return json
+// }
+
+// export async function getMetadataForNft2(
+//     uri: string, 
+//     heliaNode: Helia
+// ){
+//     const fs2 = unixfs(heliaNode)
+
+//     // this decoder will turn Uint8Arrays into strings
+//     const decoder = new TextDecoder()
+//     let text = ''
+    
+//     // read the file from the blockstore using the second Helia node
+//     for await (const chunk of fs2.cat(CID.parse(uri.slice(7)))) {
+//       text += decoder.decode(chunk, {
+//         stream: true
+//       })
+//     }
+//     return JSON.parse(text)
+// }
 }
 
 export async function postMetadataForNft(
