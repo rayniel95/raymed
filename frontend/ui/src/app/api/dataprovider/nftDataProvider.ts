@@ -160,6 +160,7 @@ export default function nftDataProvider(
             resource: string,
             params: CreateParams<T1>
         ) => {
+            checkWalletConnection();
             const uri = postMetadataForNft(
                 params.data, 
                 heliaNode
@@ -182,6 +183,7 @@ export default function nftDataProvider(
             resource: string, 
             params: UpdateParams<T1>
         ) =>{
+            checkWalletConnection()
             const uri = postMetadataForNft(
                 {...params.data, ...params.previousData},
                 heliaNode
@@ -206,6 +208,7 @@ export default function nftDataProvider(
         ) => {
             //TODO - return an error here. this is not supported because
             //the contract does not support batch updates
+            checkWalletConnection()
             return {
                 data: params.ids
             }
@@ -214,6 +217,7 @@ export default function nftDataProvider(
             resource: string, 
             params: DeleteParams
         ) => {
+            checkWalletConnection()
             const contract = getContract({
                 address: mapper[resource],
                 abi: GenericNft.abi,
@@ -231,6 +235,7 @@ export default function nftDataProvider(
             resource: string, 
             params: DeleteManyParams
         ) => {
+            checkWalletConnection()
             //TODO - return an error here. this is not supported because
             //the contract does not support batch updates
             const contract = getContract({
