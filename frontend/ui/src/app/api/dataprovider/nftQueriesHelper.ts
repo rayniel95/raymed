@@ -88,5 +88,12 @@ export async function postMetadataForNft(
     return cid.toString()
 }
 
+export async function postMetadataForNft2(
+    metadata: any, 
+    heliaNode: Helia
+){
+    const j = json(heliaNode)
+
+    const cid = await j.add(metadata)
     return cid.toString()
 }
