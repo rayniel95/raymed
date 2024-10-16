@@ -64,6 +64,14 @@ export function getNftsUriForContract(
 //     }
 //     return JSON.parse(text)
 // }
+
+export async function getMetadataForNft(
+    uri: string, 
+    heliaNode: Helia
+){
+    const j = json(heliaNode)
+    const obj = await j.get(CID.parse(uri.slice(7)))
+    return obj
 }
 
 export async function postMetadataForNft(
@@ -73,8 +81,12 @@ export async function postMetadataForNft(
     const fs = unixfs(heliaNode)
     // we will use this TextEncoder to turn strings into Uint8Arrays
     const encoder = new TextEncoder()
+    console.log(metadata)
     // add the bytes to your node and receive a unique content identifier
     const cid = await fs.addBytes(encoder.encode(JSON.stringify(metadata)))
+
+    return cid.toString()
+}
 
     return cid.toString()
 }
