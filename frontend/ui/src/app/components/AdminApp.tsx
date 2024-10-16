@@ -17,18 +17,17 @@ import { DrugExposureCreate } from "./resources/create/DrugExposureCreate";
 import { NoteList } from "./resources/list/NoteList";
 import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
-import authProvider from "../api/auth/authProvider";
-import { Route } from "react-router-dom";
+import {authProvider} from "../api/auth/authProvider";
+import { Route, Router, useLocation } from "react-router-dom";
 import Login from "./Login";
 import Wallet from "./Wallet";
 import WalletConnectLayout from "./WalletConnectLayout";
-import { useClient, useWalletClient } from "wagmi";
-import { Network, Alchemy } from "alchemy-sdk";
+import { useAccount, useClient, useWalletClient } from "wagmi";
 import nftDataProvider from "../api/dataprovider/nftDataProvider";
-import { createHelia, Helia } from "helia";
 import { mapper } from "../api/dataprovider/pathToContractMapper";
-import { useEffect, useState } from "react";
 import { Routes } from "../api/routes";
+import { useContext } from "react";
+import HeliaContext from "../contexts/HeliaContext";
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 // const settings = {
@@ -40,25 +39,18 @@ import { Routes } from "../api/routes";
 //TODO - add traceability to notes and drug exposures. some similar to a historic for
 // each item
 //TODO - maybe merge the react admin react query client with wagmi react query client
+//TODO - create a wrapper component that check for wallet connection in the sc state 
+// modifier components.
 const AdminApp = () => {
   const publicClient = useClient();
   const walletClient = useWalletClient();
-  const [helia, setHelia] = useState<Helia | null>(null)
-  //TODO - move helia loading to an upper component to avoid re-renders when the wallet is connected
-  useEffect(() => {
-    const init = async () => {
-      if (helia) return
-      const heliaNode = await createHelia()
-      setHelia(heliaNode)
-    }
-    init()
-  }, [helia])
+  const helia = useContext(HeliaContext);
+  const {isConnected} = useAccount();
 
   if (!helia) {
-    //TODO - add a loading screen
     return <div>Loading...</div>
   }
-
+  
   const dataProvider = nftDataProvider(
     mapper,
     publicClient,

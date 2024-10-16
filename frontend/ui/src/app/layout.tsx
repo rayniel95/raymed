@@ -26,15 +26,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <HeliaContextProvider>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider>
-              <HeliaContextProvider>
                 {children}
-              </HeliaContextProvider>
             </RainbowKitProvider>
           </QueryClientProvider>
         </WagmiProvider>
+        </HeliaContextProvider>
       </body>
     </html>
   );
