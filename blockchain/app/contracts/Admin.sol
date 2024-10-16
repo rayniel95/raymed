@@ -16,7 +16,7 @@ contract Admin is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
     ) ERC721("Admin", "ATK") Ownable(initialOwner) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "ijjiji";
+        return "ipfs://";
     }
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _nextTokenId++;
