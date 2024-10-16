@@ -1,10 +1,11 @@
-import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
 import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi } from 'viem'
 import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
 import { BaseModel } from "@/app/models/base";
+import { checkWalletConnection } from "@/app/blockchain/account";
 
 
 export default function nftDataProvider(
@@ -24,7 +25,7 @@ export default function nftDataProvider(
         ) => {
             const contract = getContract({
                 address: mapper[resource],
-                abi: erc721Abi,
+                abi: GenericNft.abi,
                 client: publicClient!
             })
 
@@ -37,18 +38,34 @@ export default function nftDataProvider(
                     params.pagination?.perPage!, 
                     params.pagination?.page! - 1
                 )
-                nfts = await Promise.all(nftsUris.map(async (uri) => {
-                    const metadata = await getMetadataForNft<T1>(await uri)
-                    return metadata;
+                // console.log(nftsUris)
+                const nftsPromises = await Promise.allSettled(nftsUris.map(async (uriPromise) => {
+                    return uriPromise.then(
+                        async (uri) => {
+                            return getMetadataForNft(uri, heliaNode)
+                        }, 
+                        (e) => {
+                            return e
+                       }
+                    )
                 }))
-                totalSupply = await contract.read.totalSupply();
-            } catch (e) {
+                nftsPromises.forEach(element => {
+                    console.log(element)
+                    if (element.status === 'fulfilled') {
+                        nfts.push(element.value)
+                    }
+                });
+                console.log(nfts)
+                //TODO - this can be done with the call to get the nfts. maybe as last element in 
+                //the array
+                // totalSupply = await contract.read.totalSupply();
+            } catch (e: any) {
                 //TODO - show pretty error message in the UI
                 console.log(e)
             }
             return {
                 data: nfts,
-                total: Number(totalSupply),
+                // total: Number(totalSupply),
                 pageInfo: {
                     hasNextPage: params.pagination?.page! < totalSupply,
                     hasPreviousPage: params.pagination?.page! > 1
