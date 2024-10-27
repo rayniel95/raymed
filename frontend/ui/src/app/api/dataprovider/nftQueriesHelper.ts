@@ -68,4 +68,52 @@ export async function postMetadataForNft2(
     return cid.toString()
 }
 
+export async function getNfts<T1>(
+    contractAddress: '0x{string}',
+    pageSize: number, 
+    page: number,
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    heliaNode: Helia
+){
+    let nfts: T1[] = [];
+    try{
+        const nftsUris = getNftsUriForContract(
+            publicClient!,
+            contractAddress, 
+            pageSize,
+            page
+        )
+        const nftsPromises = await Promise.allSettled(
+            nftsUris.map(async function(uriPromise):Promise<T1|null> {
+                try {
+                    const uri = await uriPromise;
+                    console.log(uri)
+                    //TODO - there is a cross origin error of cross origin header
+                    //missing. once the metadata is stored in the chain the helia 
+                    //upload the data to ipfs. but when it try to get the metadata
+                    //from ipfs it will fail because of the cross origin header
+                    const metadata = await getMetadataForNft<T1>(uri, heliaNode)
+                    console.log(metadata)
+                    return metadata
+                } catch (error) {
+                    console.log(error)
+                    return null
+                }
+            })
+        )
+        nftsPromises.forEach(element => {
+            console.log(element)
+            if (element.status === 'fulfilled' && element.value !== null) {
+                nfts.push(element.value)
+            }
+        });
+        console.log(nfts)
+        return nfts
+    } catch (e: any) {
+        //TODO - show pretty error message in the UI
+        console.log(e)
+        return []
+    }
+}
+
 }
