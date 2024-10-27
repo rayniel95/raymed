@@ -1,10 +1,11 @@
-import { getContract, erc721Abi, Client, ContractFunctionExecutionError, ContractFunctionZeroDataError } from 'viem'
-import { verifiedFetch } from '@helia/verified-fetch'
+import { getContract, erc721Abi, Client, ContractFunctionExecutionError, ContractFunctionZeroDataError, Abi, parseEventLogs } from 'viem'
 import { Helia } from 'helia';
 import { unixfs } from '@helia/unixfs'
-import { RaRecord } from 'react-admin';
 import { CID } from 'multiformats/cid';
 import { json } from '@helia/json'
+import { UseClientReturnType } from 'wagmi';
+import { config } from '@/app/blockchain/config';
+import { getTransactionReceipt } from 'wagmi/actions';
 
 
 export function getNftsUriForContract(
@@ -20,7 +21,7 @@ export function getNftsUriForContract(
     })
 
     const nftMetadataPerIndex = [];
-    try {
+    try {//TODO - this try/catch is not necessary
         for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
             nftMetadataPerIndex.push(contract.read.tokenURI([BigInt(i)]))
         }
@@ -34,44 +35,13 @@ export function getNftsUriForContract(
     }
 }
 
-//TODO - union type of all models
-// export async function getMetadataForNft<T extends RaRecord>(uri: string): Promise<T> {
-//     const resp = await verifiedFetch(uri, {
-//         headers: {
-//             accept: 'application/json'
-//         },
-//     })
-//     const json = await resp.json()
-//     console.log(json)
-//     return json
-// }
-
-// export async function getMetadataForNft2(
-//     uri: string, 
-//     heliaNode: Helia
-// ){
-//     const fs2 = unixfs(heliaNode)
-
-//     // this decoder will turn Uint8Arrays into strings
-//     const decoder = new TextDecoder()
-//     let text = ''
-    
-//     // read the file from the blockstore using the second Helia node
-//     for await (const chunk of fs2.cat(CID.parse(uri.slice(7)))) {
-//       text += decoder.decode(chunk, {
-//         stream: true
-//       })
-//     }
-//     return JSON.parse(text)
-// }
-
-export async function getMetadataForNft(
+export async function getMetadataForNft<T1>(
     uri: string, 
     heliaNode: Helia
 ){
     const j = json(heliaNode)
     const obj = await j.get(CID.parse(uri.slice(7)))
-    return obj
+    return obj as T1
 }
 
 export async function postMetadataForNft(
@@ -87,7 +57,7 @@ export async function postMetadataForNft(
 
     return cid.toString()
 }
-
+//TODO - use this function instead that previous one
 export async function postMetadataForNft2(
     metadata: any, 
     heliaNode: Helia
@@ -96,4 +66,6 @@ export async function postMetadataForNft2(
 
     const cid = await j.add(metadata)
     return cid.toString()
+}
+
 }
