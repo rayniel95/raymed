@@ -116,4 +116,32 @@ export async function getNfts<T1>(
     }
 }
 
+export async function getNftsWithTotalSupply<T1>(
+    contractAddress: '0x{string}',
+    pageSize: number, 
+    page: number,
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    heliaNode: Helia
+){
+    const contract = getContract({
+        address: contractAddress,
+        abi:erc721Abi,
+        client: publicClient!
+    })
+
+    const result = await Promise.allSettled([
+        getNfts<T1>(
+            contractAddress, 
+            pageSize, 
+            page, 
+            publicClient!, 
+            heliaNode
+        ),
+        contract.read.totalSupply()
+    ])
+    const nfts = result[0].status==='fulfilled'? result[0].value as T1[] : [];
+    const totalSupply = result[1].status==='fulfilled' ? result[1].value as bigint: undefined;
+    return { totalSupply, nfts };
+}
+
 }
