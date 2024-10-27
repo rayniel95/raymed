@@ -53,18 +53,20 @@ export default function nftDataProvider(
             resource: string, 
             params:GetOneParams
         ) => {
-            const nftsUris = getNftsUriForContract(
-                publicClient!, 
+            const { nfts } = await getNftsWithTotalSupply<T1>(
                 mapper[resource], 
                 1, 
-                parseInt(params.id.toString())
+                params.id!,
+                publicClient!, 
+                heliaNode
             )
-            const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                const metadata = await getMetadataForNft<T1>(await uri)
-                return metadata
-            }))
             return {
-                data: nfts[0]
+                data: nfts.map(function(value){
+                    return transformModelToDashboard(
+                        value, 
+                        params.id!
+                    )
+                })[0]
             }
         }, // get a single record by id
         getMany: async <T1 extends RaRecord>(
