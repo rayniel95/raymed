@@ -144,4 +144,16 @@ export async function getNftsWithTotalSupply<T1>(
     return { totalSupply, nfts };
 }
 
+export async function getNftTokenId(txHash:`0x${string}`){
+    const result = await getTransactionReceipt(config, {
+        hash: txHash
+    })
+    const event = parseEventLogs({logs: result.logs, abi: erc721Abi})
+    return Number(
+        (event[0].args as {
+            from: `0x${string}`;
+            to: `0x${string}`;
+            tokenId: bigint;
+        }).tokenId
+    )
 }
