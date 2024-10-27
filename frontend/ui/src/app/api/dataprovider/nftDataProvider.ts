@@ -1,11 +1,14 @@
-import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, Identifier, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { getMetadataForNft, getNftsUriForContract, postMetadataForNft } from "./nftQueriesHelper";
-import { getContract, erc721Abi } from 'viem'
+import { getMetadataForNft, getNfts, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft } from "./nftQueriesHelper";
+import { getContract, erc721Abi, parseEventLogs } from 'viem'
 import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
 import { BaseModel } from "@/app/models/base";
 import { checkWalletConnection } from "@/app/blockchain/account";
+import { transformModelToDashboard } from "./nftDataProviderHelper";
+import { getClient, getTransaction, getTransactionReceipt } from "wagmi/actions";
+import { config } from "@/app/blockchain/config";
 
 
 export default function nftDataProvider(
@@ -23,51 +26,25 @@ export default function nftDataProvider(
             resource: string, 
             params: GetListParams & QueryFunctionContext
         ) => {
-            const contract = getContract({
-                address: mapper[resource],
-                abi: GenericNft.abi,
-                client: publicClient!
-            })
-
-            let totalSupply = BigInt(0);
-            let nfts: T1[] = [];
-            try{
-                const nftsUris = getNftsUriForContract(
-                    publicClient!, 
-                    mapper[resource], 
-                    params.pagination?.perPage!, 
-                    params.pagination?.page! - 1
-                )
-                // console.log(nftsUris)
-                const nftsPromises = await Promise.allSettled(nftsUris.map(async (uriPromise) => {
-                    return uriPromise.then(
-                        async (uri) => {
-                            return getMetadataForNft(uri, heliaNode)
-                        }, 
-                        (e) => {
-                            return e
-                       }
-                    )
-                }))
-                nftsPromises.forEach(element => {
-                    console.log(element)
-                    if (element.status === 'fulfilled') {
-                        nfts.push(element.value)
-                    }
-                });
-                console.log(nfts)
-                //TODO - this can be done with the call to get the nfts. maybe as last element in 
-                //the array
-                // totalSupply = await contract.read.totalSupply();
-            } catch (e: any) {
-                //TODO - show pretty error message in the UI
-                console.log(e)
-            }
+            //TODO - fix generics, use the union type of all models
+            const { totalSupply, nfts } = await getNftsWithTotalSupply<T1>(
+                mapper[resource], 
+                params.pagination?.perPage!, 
+                params.pagination?.page! - 1, 
+                publicClient!, 
+                heliaNode
+            )
+            console.log(nfts)
             return {
-                data: nfts,
-                // total: Number(totalSupply),
+                data: nfts.map(function(value, index){
+                    return transformModelToDashboard(
+                        value, 
+                        (params.pagination?.page! - 1) * params.pagination?.perPage! + index
+                    )
+                }),
+                total: totalSupply?Number(totalSupply):undefined,
                 pageInfo: {
-                    hasNextPage: params.pagination?.page! < totalSupply,
+                    hasNextPage: totalSupply?params.pagination?.page! < Number(totalSupply):undefined,
                     hasPreviousPage: params.pagination?.page! > 1
                 }
             }
