@@ -153,9 +153,9 @@ export default function nftDataProvider(
             const mintResult = await contract.write.safeMint(
                 [params.data.owner,await uri]
             )
-
+            const tokenId = await getNftTokenId(mintResult)
             return {
-                data: params.data as T1
+                data: {id:tokenId as Identifier, ...params.data}
             }
         }, // create a record
         update: async <T1 extends RaRecord>(
