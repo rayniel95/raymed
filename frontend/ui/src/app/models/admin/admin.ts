@@ -1,5 +1,8 @@
-export default interface IAdmin extends Record<string, any> {
-    id: number;
+import { RaRecord } from "react-admin";
+
+
+export interface IAdmin {
+    owner: string;
     firstName: string;
     secondName: string;
     firstLastName: string;
@@ -7,3 +10,5 @@ export default interface IAdmin extends Record<string, any> {
     email: string;
     phone: string;
 }
+
+export interface IAdminDashboard extends RaRecord, IAdmin {}
