@@ -156,3 +156,39 @@ export async function getNftTokenId(txHash:`0x${string}`){
         }).tokenId
     )
 }
+
+export function addTokenIdToMetadata<T1>(
+    nfts: T1[],
+    page: number,
+    pageSize: number
+){
+    return nfts.map(function(value, index){
+        return transformModelToDashboard(
+            value, 
+            page * pageSize + index
+        )
+    }).filter(function(value){
+        return Object.keys(value).length > 1
+    })
+}
+
+export async function getNftsIndexed<T1>(
+    contractAddress: '0x{string}',
+    indexes: number[],
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    heliaNode: Helia
+){
+    const result = await Promise.allSettled(
+        indexes.map(function(index){
+            return getNfts<T1>(
+                contractAddress, 
+                1, 
+                index, 
+                publicClient!, 
+                heliaNode
+            )
+        })
+    )
+    const nfts = result[0].status==='fulfilled'? result[0].value as T1[] : [];
+    return { nfts };
+}
