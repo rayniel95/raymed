@@ -53,20 +53,6 @@ export async function getMetadataForNft<T1>(
 }
 
 export async function postMetadataForNft(
-    metadata: object, 
-    heliaNode: Helia
-){
-    const fs = unixfs(heliaNode)
-    // we will use this TextEncoder to turn strings into Uint8Arrays
-    const encoder = new TextEncoder()
-    console.log(metadata)
-    // add the bytes to your node and receive a unique content identifier
-    const cid = await fs.addBytes(encoder.encode(JSON.stringify(metadata)))
-
-    return cid.toString()
-}
-//TODO - use this function instead that previous one
-export async function postMetadataForNft2(
     metadata: any, 
     heliaNode: Helia
 ){
@@ -95,31 +81,36 @@ export async function getNfts<T1>(
             nftsUris.map(async function(uriPromise):Promise<T1|null> {
                 try {
                     const uri = await uriPromise;
-                    console.log(uri)
+                    // console.log(uri)
                     //TODO - there is a cross origin error of cross origin header
                     //missing. once the metadata is stored in the chain the helia 
                     //upload the data to ipfs. but when it try to get the metadata
-                    //from ipfs it will fail because of the cross origin header
+                    //from ipfs it will fail because of the cross origin header. this
+                    //is an error related to network connectivity configuration. the
+                    //solution is to create a ipfs private network. so, let this be
+                    //and use the local storage to store the metadata. add a timeout
+                    //to promise that try to get the metadata that is not in the
+                    //local storage to avoid waiting too long for the metadata.
                     const metadata = await getMetadataForNft<T1>(uri, heliaNode)
-                    console.log(metadata)
+                    // console.log(metadata)
                     return metadata
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     return null
                 }
             })
         )
         nftsPromises.forEach(element => {
-            console.log(element)
+            // console.log(element)
             if (element.status === 'fulfilled' && element.value !== null) {
                 nfts.push(element.value)
             }
         });
-        console.log(nfts)
+        // console.log(nfts)
         return nfts
     } catch (e: any) {
         //TODO - show pretty error message in the UI
-        console.log(e)
+        // console.log(e)
         return []
     }
 }
