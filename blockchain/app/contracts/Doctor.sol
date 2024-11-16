@@ -12,7 +12,7 @@ contract Doctor is GenericNft {
     ) GenericNft("Doctor", "DTK", adminNftContractAddress) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "koko";
+        return "ipfs://";
     }
 
 }
