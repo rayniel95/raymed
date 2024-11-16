@@ -58,12 +58,11 @@ export default function nftDataProvider(
                 heliaNode
             )
             return {
-                data: nfts.map(function(value){
-                    return transformModelToDashboard(
-                        value, 
-                        params.id!
-                    )
-                })[0]
+                data: addTokenIdToMetadata(
+                    nfts, 
+                    params.id!, 
+                    1
+                )[0]
             }
         }, // get a single record by id
         getMany: async <T1 extends RaRecord>(
