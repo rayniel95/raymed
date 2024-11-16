@@ -1,11 +1,11 @@
 import { getContract, erc721Abi, Client, ContractFunctionExecutionError, ContractFunctionZeroDataError, Abi, parseEventLogs } from 'viem'
 import { Helia } from 'helia';
-import { unixfs } from '@helia/unixfs'
 import { CID } from 'multiformats/cid';
 import { json } from '@helia/json'
 import { UseClientReturnType } from 'wagmi';
 import { config } from '@/app/blockchain/config';
 import { getTransactionReceipt } from 'wagmi/actions';
+import { transformModelToDashboard } from './nftDataProviderHelper';
 
 
 export function getNftsUriForContract(
@@ -27,7 +27,7 @@ export function getNftsUriForContract(
         }
         return nftMetadataPerIndex
     } catch (error: any) {
-        console.log(error.message)
+        // console.log(error.message)
         if (error instanceof ContractFunctionZeroDataError) {
             return []
         }
@@ -40,7 +40,15 @@ export async function getMetadataForNft<T1>(
     heliaNode: Helia
 ){
     const j = json(heliaNode)
-    const obj = await j.get(CID.parse(uri.slice(7)))
+    let obj: T1 | undefined = undefined;
+    try {
+            obj = await j.get(
+            CID.parse(uri.slice(7)), 
+            {signal: AbortSignal.timeout(10000)}
+        )
+    } catch (error) {
+        //TODO - if the error is 404 return undefined but throw in other case
+    }
     return obj as T1
 }
 
