@@ -1,6 +1,6 @@
 import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, Identifier, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { getMetadataForNft, getNfts, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft } from "./nftQueriesHelper";
+import { addTokenIdToMetadata, getMetadataForNft, getNfts, getNftsIndexed, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft } from "./nftQueriesHelper";
 import { getContract, erc721Abi, parseEventLogs } from 'viem'
 import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
@@ -34,14 +34,12 @@ export default function nftDataProvider(
                 publicClient!, 
                 heliaNode
             )
-            console.log(nfts)
+            // console.log(result)
             return {
-                data: nfts.map(function(value, index){
-                    return transformModelToDashboard(
-                        value, 
-                        (params.pagination?.page! - 1) * params.pagination?.perPage! + index
-                    )
-                }),
+                data: addTokenIdToMetadata(
+                    nfts, params.pagination?.page! - 1, 
+                    params.pagination?.perPage!
+                ),
                 total: totalSupply?Number(totalSupply):undefined,
                 pageInfo: {
                     hasNextPage: totalSupply?params.pagination?.page! < Number(totalSupply):undefined,
