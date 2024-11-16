@@ -3,7 +3,7 @@ import { Create, SimpleForm, NumberInput, TextInput, SelectInput } from "react-a
 export const PatientCreate = () => (
     <Create>
         <SimpleForm>
-            <NumberInput source="id" />
+            <TextInput source="owner" />
             <TextInput source="firstName" />
             <TextInput source="secondName" />
             <TextInput source="firstLastName" />

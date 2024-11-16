@@ -1,5 +1,5 @@
-import { Create, SimpleForm, NumberInput, TextInput } from "react-admin";
-
+import { Create, SimpleForm, TextInput } from "react-admin";
+//TODO - migrate all components to function based ones
 export const AdminCreate= () => (
     <Create>
         <SimpleForm>
