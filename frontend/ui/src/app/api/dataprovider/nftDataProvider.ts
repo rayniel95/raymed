@@ -51,10 +51,9 @@ export default function nftDataProvider(
             resource: string, 
             params:GetOneParams
         ) => {
-            const { nfts } = await getNftsWithTotalSupply<T1>(
+            const { nfts } = await getNftsIndexed<T1>(
                 mapper[resource], 
-                1, 
-                params.id!,
+                [params.id!],
                 publicClient!, 
                 heliaNode
             )
@@ -71,19 +70,13 @@ export default function nftDataProvider(
             resource: string, 
             params: GetManyParams
         ) => {
-            const nfts = await Promise.all(params.ids.map(async (id) => {
-                const nftsUris = getNftsUriForContract(
-                    publicClient!, 
-                    mapper[resource], 
-                    1, 
-                    parseInt(id.toString())
-                )
-                const nfts = await Promise.all(nftsUris.map(async (uri) => {
-                    const metadata = await getMetadataForNft<T1>(await uri)
-                    return metadata
-                }))
-                return nfts[0]
-            }))
+            const ids = params.ids! as number[]
+            const {nfts} = await getNftsIndexed<T1>(
+                mapper[resource], 
+                ids,
+                publicClient!, 
+                heliaNode
+            )
             return{
                 data: nfts
             }
