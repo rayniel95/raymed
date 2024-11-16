@@ -3,7 +3,7 @@ import { TextField, EmailField, NumberField, SelectField, Show, SimpleShowLayout
 export const DoctorShow = () => (
     <Show>
         <SimpleShowLayout>
-            <NumberField source="id" />
+            <TextField source="owner" />
             <TextField source="firstName" />
             <TextField source="secondName" />
             <TextField source="firstLastName" />

@@ -4,6 +4,7 @@ export const DoctorList = () => (
     <List>
         <Datagrid>
             <NumberField source="id" />
+            <TextField source="owner" />
             <TextField source="firstName" />
             <TextField source="secondName" />
             <TextField source="firstLastName" />

@@ -1,9 +1,9 @@
-import { List, Datagrid, TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
+import { TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
 //TODO - add relations between resources
 export const PatientShow = () => (
     <Show>
         <SimpleShowLayout>
-            <NumberField source="id" />
+            <TextField source="owner" />
             <TextField source="firstName" />
             <TextField source="secondName" />
             <TextField source="firstLastName" />
