@@ -3,6 +3,7 @@
 import { useEffect, useState, ReactNode } from "react"
 import HeliaContext from "./HeliaContext";
 import { Helia, createHelia } from "helia";
+import { IDBBlockstore } from 'blockstore-idb'
 
 
 export default function HeliaContextProvider({children}: {children: ReactNode}) {
@@ -10,7 +11,9 @@ export default function HeliaContextProvider({children}: {children: ReactNode}) 
     useEffect(() => {
       const init = async () => {
         if (helia) return
-        const heliaNode = await createHelia()
+        const blockstore = new IDBBlockstore('path/to/blockstore')
+        await blockstore.open()
+        const heliaNode = await createHelia({blockstore})
         setHelia(heliaNode)
       }
       init()
