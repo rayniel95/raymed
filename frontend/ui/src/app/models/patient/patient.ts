@@ -1,5 +1,7 @@
-export default interface IPatient extends Record<string, any> {
-    id: number;
+import { RaRecord } from "react-admin";
+import { BaseModel } from "../base";
+
+export interface IPatient extends BaseModel {   
     firstName: string;
     secondName: string;
     firstLastName: string;
@@ -10,3 +12,5 @@ export default interface IPatient extends Record<string, any> {
     ethnicity: string;
     gender: string;
 }
+
+export interface IPatientDashboard extends RaRecord, IPatient {}

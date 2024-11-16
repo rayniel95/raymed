@@ -1,8 +1,7 @@
 import { RaRecord } from "react-admin";
+import { BaseModel } from "../base";
 
-
-export interface IAdmin {
-    owner: string;
+export interface IAdmin extends BaseModel {
     firstName: string;
     secondName: string;
     firstLastName: string;

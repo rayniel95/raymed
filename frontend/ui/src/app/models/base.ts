@@ -1,6 +1,4 @@
-import { RaRecord } from "react-admin";
-
-export interface BaseModel extends RaRecord {
+export interface BaseModel {
     owner: '0x{string}'
 }
 
