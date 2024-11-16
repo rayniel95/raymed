@@ -77,7 +77,12 @@ export default function nftDataProvider(
                 heliaNode
             )
             return{
-                data: nfts
+                data: nfts.map(function(nft, index){
+                    return transformModelToDashboard(
+                        nft, 
+                        ids[index]
+                    )
+                })
             }
         }, // get a list of records based on an array of ids
         getManyReference: async<T1 extends RaRecord>(
