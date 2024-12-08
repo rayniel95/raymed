@@ -4,7 +4,7 @@ export const NoteEdit = () => (
     <Edit>
         <SimpleForm>
             <NumberInput source="id" InputProps={{ disabled: true }} />
-            <NumberInput source="patientIdentifier" InputProps={{ disabled: true }} />
+            <TextInput source="owner" InputProps={{ disabled: true }} />
             <TextInput source="title" />
             <TextInput source="date" />
             <TextInput source="text" />

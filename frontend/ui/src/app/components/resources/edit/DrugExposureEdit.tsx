@@ -5,7 +5,7 @@ export const DrugExposureEdit = () => (
     <Edit>
         <SimpleForm>
             <NumberInput source="id" InputProps={{ disabled: true }} />
-            <TextInput source="patientIdentifier" InputProps={{ disabled: true }} />
+            <TextInput source="owner" InputProps={{ disabled: true }} />
             <TextInput source="type" />
             <TextInput source="startDate" />
             <TextInput source="endDate" />
