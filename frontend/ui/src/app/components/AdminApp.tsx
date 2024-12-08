@@ -99,7 +99,7 @@ const AdminApp = () => {
         list={NoteList}
         show={NoteShow}
         create={NoteCreate}
-        edit={EditGuesser}
+        edit={NoteEdit}
       />
       <CustomRoutes>
         //TODO - this must be a model with list and show
