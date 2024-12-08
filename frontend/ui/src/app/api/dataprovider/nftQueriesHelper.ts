@@ -178,6 +178,7 @@ export async function getNftsIndexed<T1>(
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     heliaNode: Helia
 ){
+    console.log(contractAddress, indexes)
     const result = await Promise.allSettled(
         indexes.map(function(index){
             return getNfts<T1>(
@@ -191,4 +192,115 @@ export async function getNftsIndexed<T1>(
     )
     const nfts = result[0].status==='fulfilled'? result[0].value as T1[] : [];
     return { nfts };
+}
+
+// export async function queryNftByIdUsingTheOwner<T1>(
+//     sourceContractAddress: '0x{string}',
+//     targetContractAddress: '0x{string}',
+//     id: number,
+//     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+//     heliaNode: Helia
+// )
+// {
+//     const sourceContract = getContract({
+//         address: sourceContractAddress,
+//         abi: erc721Abi,
+//         client: publicClient!
+//     })
+
+//     const contractToQuery = getContract({
+//         address: targetContractAddress,
+//         abi: erc721Abi,
+//         client: publicClient!
+//     })
+//     // console.log(sourceContractAddress, targetContractAddress, id)
+//     const ownerAddress = await sourceContract.read.ownerOf([BigInt(id)]);
+
+//     const totalSupply = await contractToQuery.read.totalSupply();
+//     const nfts = [];
+//     for (let i = 0; i < totalSupply; i++) {
+//         nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
+//     }
+//     const allOwners = await Promise.allSettled(nfts);
+//     const nftsOfOnwer = [];
+//     const idsOfOwner = [];
+    
+//     for(let i = 0; i < allOwners.length; i++){
+//         if (allOwners[i].status === 'fulfilled' && (allOwners[i] as PromiseFulfilledResult<string>).value === ownerAddress) {
+//             const nft = async function() {
+//                 const nftsUris = getNftsUriForContract(
+//                     publicClient!,
+//                     targetContractAddress,
+//                     1,
+//                     i
+//                 )
+//                 const metadata = await getMetadataForNft<T1>(await nftsUris[0], heliaNode)
+//                 return metadata
+//             }
+//             nftsOfOnwer.push(nft())
+//             idsOfOwner.push(i)
+//         }
+//     }
+//     const allNfts = await Promise.allSettled(nftsOfOnwer);
+
+//     const nftsOfOnwerWithId = [];
+//     for(let i = 0; i < allNfts.length; i++){
+//         if (allNfts[i].status === 'fulfilled') {
+//             const nft = (allNfts[i] as PromiseFulfilledResult<T1>).value;
+//             nftsOfOnwerWithId.push({id: idsOfOwner[i], ...nft})
+//         }
+//     }
+//     return nftsOfOnwerWithId;
+// }
+
+export async function queryNftByOwner<T1>(
+    targetContractAddress: '0x{string}',
+    owner: `0x${string}`,
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    heliaNode: Helia
+)
+{
+    const contractToQuery = getContract({
+        address: targetContractAddress,
+        abi: erc721Abi,
+        client: publicClient!
+    })
+    
+    const totalSupply = await contractToQuery.read.totalSupply();
+    const nfts = [];
+    for (let i = 0; i < totalSupply; i++) {
+        nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
+    }
+    const allOwners = await Promise.allSettled(nfts);
+    const nftsOfOnwer = [];
+    const idsOfOwner = [];
+    
+    for(let i = 0; i < allOwners.length; i++){
+        if (allOwners[i].status === 'fulfilled' && (allOwners[i] as PromiseFulfilledResult<string>).value === owner) {
+            const nft = async function() {
+                const nftsUris = getNftsUriForContract(
+                    publicClient!,
+                    targetContractAddress,
+                    1,
+                    i
+                )
+                const metadata = await getMetadataForNft<T1>(await nftsUris[0], heliaNode)
+                return metadata
+            }
+            nftsOfOnwer.push(nft())
+            idsOfOwner.push(i)
+        }
+    }
+    const allNfts = await Promise.allSettled(nftsOfOnwer);
+
+    const nftsOfOnwerWithId = [];
+    for(let i = 0; i < allNfts.length; i++){
+        if (allNfts[i].status === 'fulfilled') {
+            const nft = (allNfts[i] as PromiseFulfilledResult<T1>).value;
+            nftsOfOnwerWithId.push({id: idsOfOwner[i], ...nft})
+        }
+    }
+    return nftsOfOnwerWithId;
+}
+
 }
