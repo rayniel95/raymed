@@ -1,10 +1,10 @@
-import { TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
+import { TextField, NumberField, SelectField, Show, SimpleShowLayout, ReferenceField, Datagrid, SingleFieldList } from "react-admin";
 //TODO - add relations between resources
 export const DrugExposureShow = () => (
     <Show>
         <SimpleShowLayout>
             <NumberField source="id" />
-            <TextField source="patientIdentifier" />
+            <TextField source="owner" />
             <TextField source="type" />
             <TextField source="startDate" />
             <TextField source="endDate" />
