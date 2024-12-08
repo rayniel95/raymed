@@ -4,7 +4,7 @@ export const DrugExposureList = () => (
     <List>
         <Datagrid>
             <NumberField source="id" />
-            <TextField source="patientIdentifier" />
+            <TextField source="owner" />
             <TextField source="type" />
             <TextField source="startDate" />
             <TextField source="endDate" />
