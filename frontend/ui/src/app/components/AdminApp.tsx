@@ -1,6 +1,6 @@
 "use client"; // remove this line if you choose Pages Router
 
-import { Admin, Resource, EditGuesser, CustomRoutes } from "react-admin";
+import { Admin, Resource, CustomRoutes } from "react-admin";
 import { AdminList } from "./resources/list/AdminList";
 import { AdminShow } from "./resources/show/AdminShow";
 import { AdminCreate } from "./resources/create/AdminCreate";
@@ -18,8 +18,7 @@ import { NoteList } from "./resources/list/NoteList";
 import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
 import {authProvider} from "../api/auth/authProvider";
-import { Route, Router, useLocation } from "react-router-dom";
-import Login from "./Login";
+import { Route} from "react-router-dom";
 import Wallet from "./Wallet";
 import WalletConnectLayout from "./WalletConnectLayout";
 import { useAccount, useClient, useWalletClient } from "wagmi";
@@ -28,6 +27,8 @@ import { mapper } from "../api/dataprovider/pathToContractMapper";
 import { Routes } from "../api/routes";
 import { useContext } from "react";
 import HeliaContext from "../contexts/HeliaContext";
+import { NoteEdit } from "./resources/edit/NoteEdit";
+import { createDataProvider } from "../api/dataprovider/nftDataProviderHelper";
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 // const settings = {
@@ -51,10 +52,10 @@ const AdminApp = () => {
     return <div>Loading...</div>
   }
   
-  const dataProvider = nftDataProvider(
+  const dataProvider = createDataProvider(
     mapper,
-    publicClient,
-    walletClient,
+    publicClient!,
+    walletClient!,
     helia!
   )
 
