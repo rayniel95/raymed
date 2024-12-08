@@ -4,8 +4,8 @@ import { SimpleForm, TextInput, NumberInput, Create } from "react-admin";
 export const DrugExposureCreate = () => (
     <Create>
         <SimpleForm>
-            <NumberInput source="id" InputProps={{ disabled: true }} />
-            <TextInput source="patientIdentifier"/>
+            {/* <NumberInput source="id" InputProps={{ disabled: true }} /> */}
+            <TextInput source="owner"/>
             <TextInput source="type" />
             <TextInput source="startDate" />
             <TextInput source="endDate" />

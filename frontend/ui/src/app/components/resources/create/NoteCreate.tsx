@@ -3,8 +3,8 @@ import { NumberInput, TextInput, SimpleForm, Create } from "react-admin";
 export const NoteCreate = () => (
     <Create>
         <SimpleForm>
-            <NumberInput source="id" InputProps={{ disabled: true }} />
-            <NumberInput source="patientIdentifier" />
+            {/* <NumberInput source="id" InputProps={{ disabled: true }} /> */}
+            <TextInput source="owner" />
             <TextInput source="title" />
             <TextInput source="date" />
             <TextInput source="text" />
