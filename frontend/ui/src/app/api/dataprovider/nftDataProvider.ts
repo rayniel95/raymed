@@ -1,6 +1,6 @@
 import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, Identifier, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { addTokenIdToMetadata, getMetadataForNft, getNfts, getNftsIndexed, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft } from "./nftQueriesHelper";
+import { addTokenIdToMetadata, getMetadataForNft, getNfts, getNftsIndexed, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft, queryNftByOwner } from "./nftQueriesHelper";
 import { getContract, erc721Abi, parseEventLogs } from 'viem'
 import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
@@ -89,45 +89,16 @@ export default function nftDataProvider(
             resource: string,
             params: GetManyReferenceParams
         ) => {
-            //NOTE - search for the owner of params.id in the current nft contract
-            //and query the contract in resource for the nfts with the same owner
-            const contract = getContract({
-                address: mapper[resource],
-                abi: GenericNft.abi,
-                client: publicClient!
-            })
-
-            const ownerAddress = await contract.read.ownerOf([BigInt(params.id)]);
-            const contractToQuery = getContract({
-                address: resource as '0x{string}',
-                abi: erc721Abi,
-                client: publicClient!
-            })
-
-            const totalSupply = await contractToQuery.read.totalSupply();
-            const nfts = [];
-            for (let i = 0; i < totalSupply; i++) {
-                nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
-            }
-            const nftsOwners = await Promise.all(nfts);
-            const nftsOfOnwer = [];
-            for(let i = 0; i < nftsOwners.length; i++){
-                if (nftsOwners[i] === ownerAddress) {
-                    const nft = async() => {
-                        const nftsUris = getNftsUriForContract(
-                            publicClient!,
-                            resource as '0x{string}',
-                            1,
-                            i
-                        )
-                        const metadata = await getMetadataForNft<T1>(await nftsUris[0])
-                        return metadata
-                    }
-                    nftsOfOnwer.push(nft())
-                }
-            }
+            console.log(resource, params)
+            const nfts = await queryNftByOwner<T1>(
+                mapper[resource],
+                params.id.toString() as `0x${string}`,
+                publicClient!, 
+                heliaNode
+            )
             return {
-                data: await Promise.all(nftsOfOnwer)
+                data: nfts,
+                total: nfts.length
             }
         }, // get the records referenced to another record, e.g. comments for a post
         create: async <T1 extends BaseModel>(
