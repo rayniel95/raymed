@@ -58,11 +58,12 @@ const AdminApp = () => {
     walletClient!,
     helia!
   )
+  const auth = authProvider(walletClient, isConnected);
 
   return (
     <Admin
       dataProvider={dataProvider}
-      authProvider={authProvider}
+      authProvider={auth}
       // loginPage={Login} 
       layout={WalletConnectLayout}
     >
