@@ -4,7 +4,7 @@ export const NoteList = () => (
     <List>
         <Datagrid>
             <NumberField source="id" />
-            <NumberField source="patientIdentifier" />
+            <TextField source="owner" />
             <TextField source="title" />
             <TextField source="date" />
             <TextField source="text" />
