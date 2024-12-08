@@ -303,4 +303,19 @@ export async function queryNftByOwner<T1>(
     return nftsOfOnwerWithId;
 }
 
+export function getNftsHistory<T>(
+    contractAddress: '0x{string}',
+    publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
+    heliaNode: Helia
+){
+    const contract = getContract({
+        address: contractAddress,
+        abi: erc721Abi,
+        client: publicClient!
+    })
+
+    contract.getEvents('Transfer', {
+        fromBlock: 0,
+        toBlock: 'latest'
+    })
 }
