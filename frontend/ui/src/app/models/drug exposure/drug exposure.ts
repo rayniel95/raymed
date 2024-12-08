@@ -1,6 +1,6 @@
-export default interface IDrugExposure extends Record<string, any> {
-    id: number;
-    patientIdentifier: number;
+import { BaseModel } from "../base";
+
+export default interface IDrugExposure extends BaseModel {
     type: string;
     startDate: string;
     endDate: string;

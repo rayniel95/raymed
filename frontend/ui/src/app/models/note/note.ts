@@ -1,6 +1,6 @@
-export default interface INote extends Record<string, any> {
-    id: number;
-    patientIdentifier: number;
+import { BaseModel } from "../base";
+
+export default interface INote extends BaseModel {
     title: string;
     date: string;    
     text: string;
