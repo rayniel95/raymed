@@ -1,5 +1,5 @@
-import { TextField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
-//TODO - add relations between resources
+import { TextField, NumberField, SelectField, Show, SimpleShowLayout, ReferenceField, ReferenceManyField, Datagrid } from "react-admin";
+//TODO - add relations between resources with a pretty field
 export const PatientShow = () => (
     <Show>
         <SimpleShowLayout>
@@ -13,6 +13,19 @@ export const PatientShow = () => (
             <NumberField source="dayOfBirth" />
             <SelectField source="ethnicity" />
             <SelectField source="gender" />
+            <ReferenceManyField source="owner" label="Drug Exposures" target="owner" reference="drugExposures">
+                <Datagrid>
+                    <TextField source="type" />
+                    <TextField source="startDate" />
+                    <TextField source="endDate" />
+                </Datagrid>
+            </ReferenceManyField>
+            <ReferenceManyField source="owner" label="Notes" target="owner" reference="notes">
+                <Datagrid>
+                    <TextField source="title" />
+                    <TextField source="date" />
+                </Datagrid>
+            </ReferenceManyField>
         </SimpleShowLayout>
     </Show>
 );
