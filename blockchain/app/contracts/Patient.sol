@@ -15,7 +15,7 @@ contract Patient is GenericNft {
     ) GenericNft("Patient", "PTK", doctorNftContractAddress) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "koko";
+        return "ipfs://";
     }
 
     function burn(uint256 tokenId) public override {

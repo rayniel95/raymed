@@ -15,7 +15,7 @@ contract Note is GenericNft{
     ) GenericNft("Note", "MRTK", doctorNftContractAddress){}
     //TODO - fix this
     function _baseURI() internal pure override returns (string memory) {
-        return "http://medical.record";
+        return "ipfs://";
     }
 
     function setTokenURI(uint256 tokenId, string memory _newUri) public onlyNftOwner {
