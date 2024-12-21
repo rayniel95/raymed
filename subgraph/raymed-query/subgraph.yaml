@@ -8,7 +8,7 @@ dataSources:
     name: DrugExposure
     network: sepolia
     source:
-      address: "0xebc6ac0Ee709a29dd784827b77012b1086CC07d7"
+      address: "0x3695C6f2A41B94e5E8aC82277FC8016bd4a73F3e"
       abi: DrugExposure
       startBlock: 0
     mapping:
