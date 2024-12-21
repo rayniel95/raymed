@@ -6,7 +6,7 @@ import {
   BatchMetadataUpdate,
   MetadataUpdate,
   Transfer
-} from "../generated/Note/Note"
+} from "../generated/DrugExposure/DrugExposure"
 
 export function createApprovalEvent(
   owner: Address,

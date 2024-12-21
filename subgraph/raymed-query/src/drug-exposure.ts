@@ -4,7 +4,7 @@ import {
   BatchMetadataUpdate as BatchMetadataUpdateEvent,
   MetadataUpdate as MetadataUpdateEvent,
   Transfer as TransferEvent
-} from "../generated/Note/Note"
+} from "../generated/DrugExposure/DrugExposure"
 import {
   Approval,
   ApprovalForAll,

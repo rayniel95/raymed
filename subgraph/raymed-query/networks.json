@@ -1,6 +1,6 @@
 {
   "sepolia": {
-    "Note": {
+    "DrugExposure": {
       "address": "0xebc6ac0Ee709a29dd784827b77012b1086CC07d7",
       "startBlock": 0
     }
