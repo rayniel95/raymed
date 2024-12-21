@@ -1,6 +1,6 @@
 "use client"; // remove this line if you choose Pages Router
 
-import { Admin, Resource, CustomRoutes } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import { AdminList } from "./resources/list/AdminList";
 import { AdminShow } from "./resources/show/AdminShow";
 import { AdminCreate } from "./resources/create/AdminCreate";
@@ -18,11 +18,8 @@ import { NoteList } from "./resources/list/NoteList";
 import { NoteShow } from "./resources/show/NoteShow";
 import { NoteCreate } from "./resources/create/NoteCreate";
 import {authProvider} from "../api/auth/authProvider";
-import { Route} from "react-router-dom";
-import Wallet from "./Wallet";
 import WalletConnectLayout from "./WalletConnectLayout";
 import { useAccount, useClient, useWalletClient } from "wagmi";
-import nftDataProvider from "../api/dataprovider/nftDataProvider";
 import { mapper } from "../api/dataprovider/pathToContractMapper";
 import { Routes } from "../api/routes";
 import { useContext } from "react";
@@ -101,10 +98,10 @@ const AdminApp = () => {
         create={NoteCreate}
         edit={NoteEdit}
       />
-      <CustomRoutes>
+      {/* <CustomRoutes>
         //TODO - this must be a model with list and show
         <Route path="/history" element={<Wallet />} />
-      </CustomRoutes>
+      </CustomRoutes> */}
     </Admin>
   )
 };

@@ -12,6 +12,7 @@
     "@helia/json": "^4.0.0",
     "@rainbow-me/rainbowkit": "^2.1.5",
     "@tanstack/react-query": "^5.53.2",
+    "alchemy-sdk": "^3.5.0",
     "blockstore-idb": "^2.0.1",
     "helia": "^5.0.0",
     "multiformats": "^13.3.0",
