@@ -9,7 +9,7 @@ import {GenericNft} from "./common/GenericNft.sol";
 
 
 contract Note is GenericNft{
- 
+    event NftUpdated(uint256 indexed tokenId, string newUri);
     constructor(
         address doctorNftContractAddress
     ) GenericNft("Note", "MRTK", doctorNftContractAddress){}
@@ -20,6 +20,7 @@ contract Note is GenericNft{
 
     function setTokenURI(uint256 tokenId, string memory _newUri) public onlyNftOwner {
         _setTokenURI(tokenId, _newUri);
+        emit NftUpdated(tokenId, _newUri);
     }
 
     function burn(uint256 tokenId) public override {

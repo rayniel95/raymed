@@ -12,7 +12,7 @@ import {NftOwner} from "../access control/NftOwner.sol";
 contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, NftOwner {
     uint256 private _nextTokenId;
     address internal _ownerNftContractAddress;
-
+    event NftCreated(uint256 indexed tokenId, string uri);
     constructor(
         string memory tokenName,
         string memory tokenSymbol,
@@ -25,6 +25,7 @@ contract GenericNft is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        emit NftCreated(tokenId, uri);
         // approve(_ownerNftContractAddress, tokenId);
     }
     //TODO - add events to methods
