@@ -3,6 +3,7 @@ import nftDataProvider from "./nftDataProvider";
 import { Helia } from "helia";
 import { combineDataProviders, DataProvider } from "react-admin";
 import nftHistoryDataProvider from "./nftDataProviderHistory";
+import { Routes } from "../routes";
 
 export function transformModelToDashboard<T>(
     model: T, id: number
@@ -35,14 +36,16 @@ export function createDataProvider(
     )
 
     return combineDataProviders(function(resource: string) {
-        switch (resource) {
-            case 'posts':
-            case 'comments':
-                return usualDataProvider;
-            case 'users':
-                return historyDataProvider;
-            default:
-                throw new Error(`Unknown resource: ${resource}`);
+        if([
+            Routes.AdminRoute, 
+            Routes.DoctorRoute, 
+            Routes.PatientRoute, 
+            Routes.DrugExposureRoute, 
+            Routes.NoteRoute].includes(resource as Routes)
+        ){
+            return usualDataProvider;
         }
+        
+        throw new Error(`Unknown resource: ${resource}`);
     });
 }    
