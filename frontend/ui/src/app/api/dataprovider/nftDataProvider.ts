@@ -119,9 +119,9 @@ export default function nftDataProvider(
             const mintResult = await contract.write.safeMint(
                 [params.data.owner,await uri]
             )
-            const tokenId = await getNftTokenId(mintResult)
+            // const tokenId = await getNftTokenId(mintResult)
             return {
-                data: {id:tokenId, ...params.data} as any
+                data: {id:0, ...params.data} as any
             }
         }, // create a record
         update: async <T1 extends RaRecord>(
@@ -130,7 +130,7 @@ export default function nftDataProvider(
         ) =>{
             checkWalletConnection()
             const uri = postMetadataForNft(
-                {...params.data, ...params.previousData},
+                {...params.previousData, ...params.data},
                 heliaNode
             )
             const contract = getContract({
@@ -139,8 +139,7 @@ export default function nftDataProvider(
                 client: walletClient.data!
             })
             await contract.write.setTokenURI(
-                [params.id.toString()],
-                await uri
+                [params.id.toString(), await uri]
             )
 
             return {
