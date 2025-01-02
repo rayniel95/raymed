@@ -7,6 +7,7 @@ import { config } from '@/app/blockchain/config';
 import { getTransactionReceipt } from 'wagmi/actions';
 import { transformModelToDashboard } from './nftDataProviderHelper';
 import { Network, Alchemy, AssetTransfersCategory, AssetTransfersWithMetadataResponse } from 'alchemy-sdk';
+import { drugExposureQuery } from '../queries/graphqlClient';
 
 
 export function getNftsUriForContract(
@@ -195,65 +196,6 @@ export async function getNftsIndexed<T1>(
     return { nfts };
 }
 
-// export async function queryNftByIdUsingTheOwner<T1>(
-//     sourceContractAddress: '0x{string}',
-//     targetContractAddress: '0x{string}',
-//     id: number,
-//     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
-//     heliaNode: Helia
-// )
-// {
-//     const sourceContract = getContract({
-//         address: sourceContractAddress,
-//         abi: erc721Abi,
-//         client: publicClient!
-//     })
-
-//     const contractToQuery = getContract({
-//         address: targetContractAddress,
-//         abi: erc721Abi,
-//         client: publicClient!
-//     })
-//     // console.log(sourceContractAddress, targetContractAddress, id)
-//     const ownerAddress = await sourceContract.read.ownerOf([BigInt(id)]);
-
-//     const totalSupply = await contractToQuery.read.totalSupply();
-//     const nfts = [];
-//     for (let i = 0; i < totalSupply; i++) {
-//         nfts.push(contractToQuery.read.ownerOf([BigInt(i)]))
-//     }
-//     const allOwners = await Promise.allSettled(nfts);
-//     const nftsOfOnwer = [];
-//     const idsOfOwner = [];
-    
-//     for(let i = 0; i < allOwners.length; i++){
-//         if (allOwners[i].status === 'fulfilled' && (allOwners[i] as PromiseFulfilledResult<string>).value === ownerAddress) {
-//             const nft = async function() {
-//                 const nftsUris = getNftsUriForContract(
-//                     publicClient!,
-//                     targetContractAddress,
-//                     1,
-//                     i
-//                 )
-//                 const metadata = await getMetadataForNft<T1>(await nftsUris[0], heliaNode)
-//                 return metadata
-//             }
-//             nftsOfOnwer.push(nft())
-//             idsOfOwner.push(i)
-//         }
-//     }
-//     const allNfts = await Promise.allSettled(nftsOfOnwer);
-
-//     const nftsOfOnwerWithId = [];
-//     for(let i = 0; i < allNfts.length; i++){
-//         if (allNfts[i].status === 'fulfilled') {
-//             const nft = (allNfts[i] as PromiseFulfilledResult<T1>).value;
-//             nftsOfOnwerWithId.push({id: idsOfOwner[i], ...nft})
-//         }
-//     }
-//     return nftsOfOnwerWithId;
-// }
-
 export async function queryNftByOwner<T1>(
     targetContractAddress: '0x{string}',
     owner: `0x${string}`,
@@ -336,6 +278,4 @@ export async function getNftsHistory<T>(
     }
 }
 
-export function getDrugExposureHistory(){
-    
 }
