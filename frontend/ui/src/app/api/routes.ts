@@ -5,3 +5,8 @@ export enum Routes{
     DrugExposureRoute = "drugExposures",
     NoteRoute = "notes"
 }
+
+export enum RoutesHistory{
+    NoteHistoryRoute = "notes/history",
+    DrugExposureHistoryRoute = "drugExposures/history"
+}
