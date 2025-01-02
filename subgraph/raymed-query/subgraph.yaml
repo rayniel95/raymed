@@ -27,3 +27,26 @@ dataSources:
         - event: NftUpdated(indexed uint256,string)
           handler: handleNftMetadataUpdate
       file: ./src/drug-exposure.ts
+  - kind: ethereum
+    name: Note
+    network: sepolia
+    source:
+      address: "0xb88c40ECf53d38309C2f124CC802399cbE5a16F6"
+      abi: Note
+      startBlock: 7381208
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NftCreated
+        - NftUpdated
+      abis:
+        - name: DrugExposure
+          file: ./abis/DrugExposure.json
+      eventHandlers:
+        - event: NftCreated(indexed uint256,string)
+          handler: handleNftMint
+        - event: NftUpdated(indexed uint256,string)
+          handler: handleNftMetadataUpdate
+      file: ./src/note.ts
