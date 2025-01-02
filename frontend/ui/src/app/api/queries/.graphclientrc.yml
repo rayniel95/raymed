@@ -1,0 +1,13 @@
+# .graphclientrc.yml
+sources:
+  - name: raymed-query
+    handler:
+      graphql:
+        endpoint: https://api.studio.thegraph.com/query/99075/raymed-query/version/latest
+  # - name: drugExposure
+  #   handler:
+  #     graphql:
+  #       endpoint: https://api.thegraph.com/subgraphs/name/graphprotocol/compound-v2
+
+documents:
+  - ./queries.graphql
