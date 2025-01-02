@@ -1,0 +1,15 @@
+query DrugExposure($first: Int, $skip: Int) {
+  drugExposures(first: $first, skip: $skip) {
+    id
+    tokenId
+    uri
+  }
+}
+
+query Note($first: Int, $skip: Int) {
+  notes(first: $first, skip: $skip) {
+    id
+    tokenId
+    uri
+  }
+}
