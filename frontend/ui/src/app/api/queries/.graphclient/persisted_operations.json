@@ -1,0 +1,3 @@
+{
+  "93829f4e206be95ccb2fb6f9dec39ad52d0bcd5709ce8bfca6aa2795b0a84d3f": "query DrugExposure($first: Int, $skip: Int) {\n  drugExposures(first: $first, skip: $skip) {\n    id\n    tokenId\n    uri\n  }\n}\n\nquery Note($first: Int, $skip: Int) {\n  notes(first: $first, skip: $skip) {\n    id\n    tokenId\n    uri\n  }\n}"
+}
