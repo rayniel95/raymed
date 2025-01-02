@@ -1,7 +1,7 @@
-import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, Error, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, HttpError, Identifier, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
+import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { addTokenIdToMetadata, getMetadataForNft, getNfts, getNftsIndexed, getNftsUriForContract, getNftsWithTotalSupply, getNftTokenId, postMetadataForNft, queryNftByOwner } from "./nftQueriesHelper";
-import { getContract, erc721Abi, parseEventLogs } from 'viem'
+import { addTokenIdToMetadata, getHistory, getNftsIndexed, getNftTokenId, postMetadataForNft, queryNftByOwner } from "./nftQueriesHelper";
+import { getContract } from 'viem'
 import { Helia } from "helia";
 import GenericNft from "./GenericNft.json";
 import { BaseModel } from "@/app/models/base";
@@ -10,7 +10,7 @@ import { transformModelToDashboard } from "./nftDataProviderHelper";
 
 
 export default function nftHistoryDataProvider(
-    mapper: Record<string, "0x{string}">,
+    mapper: Record<string, (arg0: number, arg1: number)=> Promise<any>>,
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
     heliaNode: Helia
@@ -25,42 +25,35 @@ export default function nftHistoryDataProvider(
             params: GetListParams & QueryFunctionContext
         ) => {
             //TODO - fix generics, use the union type of all models
-            const { totalSupply, nfts } = await getNftsWithTotalSupply<T1>(
-                mapper[resource], 
-                params.pagination?.perPage!, 
-                params.pagination?.page! - 1, 
-                publicClient!, 
+            const nfts= await getHistory<T1>(
+                params.pagination?.page!, 
+                params.pagination?.perPage!,
+                mapper[resource],
                 heliaNode
             )
             // console.log(result)
             return {
-                data: addTokenIdToMetadata(
-                    nfts, params.pagination?.page! - 1, 
-                    params.pagination?.perPage!
-                ),
-                total: totalSupply?Number(totalSupply):undefined,
-                pageInfo: {
-                    hasNextPage: totalSupply?params.pagination?.page! < Number(totalSupply):undefined,
-                    hasPreviousPage: params.pagination?.page! > 1
-                }
+                data: nfts,
+                // total: totalSupply?Number(totalSupply):undefined,
+                // pageInfo: {
+                //     hasNextPage: totalSupply?params.pagination?.page! < Number(totalSupply):undefined,
+                //     hasPreviousPage: params.pagination?.page! > 1
+                // }
             }
         }, // get a list of records based on sort, filter, and pagination
         getOne: async <T1 extends RaRecord>(
             resource: string, 
             params:GetOneParams
         ) => {
-            const { nfts } = await getNftsIndexed<T1>(
-                mapper[resource], 
-                [params.id!],
-                publicClient!, 
+            const nfts = await getHistory<T1>(
+                params.id!,
+                1,
+                mapper[resource],
                 heliaNode
             )
+
             return {
-                data: addTokenIdToMetadata(
-                    nfts, 
-                    params.id!, 
-                    1
-                )[0]
+                data: nfts[0]
             }
         }, // get a single record by id
         getMany: async <T1 extends RaRecord>(
