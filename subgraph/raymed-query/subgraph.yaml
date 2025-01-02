@@ -32,7 +32,7 @@ dataSources:
     network: sepolia
     source:
       address: "0xb88c40ECf53d38309C2f124CC802399cbE5a16F6"
-      abi: Note
+      abi: DrugExposure
       startBlock: 7381208
     mapping:
       kind: ethereum/events
