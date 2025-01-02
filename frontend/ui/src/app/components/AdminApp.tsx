@@ -21,11 +21,14 @@ import {authProvider} from "../api/auth/authProvider";
 import WalletConnectLayout from "./WalletConnectLayout";
 import { useAccount, useClient, useWalletClient } from "wagmi";
 import { mapper } from "../api/dataprovider/pathToContractMapper";
-import { Routes } from "../api/routes";
+import { Routes, RoutesHistory } from "../api/routes";
 import { useContext } from "react";
 import HeliaContext from "../contexts/HeliaContext";
 import { NoteEdit } from "./resources/edit/NoteEdit";
 import { createDataProvider } from "../api/dataprovider/nftDataProviderHelper";
+import { NoteHistoryList } from "./resources/list/NoteHistoryList";
+import { NoteHistoryShow } from "./resources/show/NoteHistoryShow";
+import { DrugExposureHistoryShow } from "./resources/show/DrugExposureHistoryShow";
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 // const settings = {
@@ -98,10 +101,16 @@ const AdminApp = () => {
         create={NoteCreate}
         edit={NoteEdit}
       />
-      {/* <CustomRoutes>
-        //TODO - this must be a model with list and show
-        <Route path="/history" element={<Wallet />} />
-      </CustomRoutes> */}
+      <Resource
+        name={RoutesHistory.NoteHistoryRoute.toString()}
+        list={NoteHistoryList}
+        show={NoteHistoryShow}
+      />
+      <Resource
+        name={RoutesHistory.DrugExposureHistoryRoute.toString()}
+        list={DrugExposureHistoryShow}
+        show={DrugExposureHistoryShow}
+      />
     </Admin>
   )
 };
