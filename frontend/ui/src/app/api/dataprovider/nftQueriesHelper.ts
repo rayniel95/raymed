@@ -334,6 +334,8 @@ export async function getNftsHistory<T>(
     if (i < page) {
         return [];
     }
-    
+}
+
+export function getDrugExposureHistory(){
     
 }
