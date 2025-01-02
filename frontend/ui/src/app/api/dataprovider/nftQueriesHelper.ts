@@ -245,17 +245,18 @@ export async function queryNftByOwner<T1>(
 }
 
 // TODO - fix the type of the function
-export async function getDrugExposureHistory<T1>(
+export async function getHistory<T1>(
     page: number, 
     pageSize: number,
+    query: (arg0: number, arg1: number)=>Promise<any>,
     heliaNode: Helia
 ): Promise<any[]>{
     const nfts: any[] = []
-    const drugExposureResponse = await drugExposureQuery(pageSize, (page - 1) * pageSize);
+    const entityResponse = await query(pageSize, (page - 1) * pageSize);
     const nftsPromises = await Promise.allSettled(
-        drugExposureResponse.map(async function(drugExposure: any):Promise<T1|null> {
+        entityResponse.map(async function(entity: any):Promise<T1|null> {
             try {
-                const uri = drugExposure.uri;
+                const uri = entity.uri;
                 const metadata = await getMetadataForNft<T1>(uri, heliaNode)
                 // console.log(metadata)
                 return metadata
