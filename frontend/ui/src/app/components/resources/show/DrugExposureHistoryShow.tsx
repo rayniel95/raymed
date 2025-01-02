@@ -1,6 +1,6 @@
 import { TextField, NumberField, Show, SimpleShowLayout, ReferenceField } from "react-admin";
 
-export const DrugExposureShow = () => (
+export const DrugExposureHistoryShow = () => (
     <Show>
         <SimpleShowLayout>
             <NumberField source="id" />

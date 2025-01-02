@@ -1,19 +1,16 @@
 import { TextField, NumberField, Show, SimpleShowLayout, ReferenceField } from "react-admin";
-
-export const DrugExposureShow = () => (
+//TODO - add relations between resources
+export const NoteHistoryShow = () => (
     <Show>
         <SimpleShowLayout>
             <NumberField source="id" />
             <TextField source="owner" />
-            <TextField source="type" />
-            <TextField source="startDate" />
-            <TextField source="endDate" />
-            <NumberField source="daysSupply" />
-            <NumberField source="lotNumber" />
-            <TextField source="stopReason" />
+            <TextField source="title" />
+            <TextField source="date" />
+            <TextField source="text" />
             <ReferenceField source="id" label="Patient" reference="patients">
                 <SimpleShowLayout>
-                    <TextField source="firstName"/>
+                    <TextField source="firstName" />
                     <TextField source="secondName" />
                     <TextField source="firstLastName" />
                     <TextField source="secondLastName" />
