@@ -6,8 +6,6 @@ import { UseClientReturnType } from 'wagmi';
 import { config } from '@/app/blockchain/config';
 import { getTransactionReceipt } from 'wagmi/actions';
 import { transformModelToDashboard } from './nftDataProviderHelper';
-import { Network, Alchemy, AssetTransfersCategory, AssetTransfersWithMetadataResponse } from 'alchemy-sdk';
-import { drugExposureQuery } from '../queries/graphqlClient';
 
 
 export function getNftsUriForContract(
@@ -246,37 +244,6 @@ export async function queryNftByOwner<T1>(
     return nftsOfOnwerWithId;
 }
 
-// export async function getNftsHistory<T>(
-//     contractAddress: '0x{string}',
-//     pageSize: number,
-//     page: number,
-//     heliaNode: Helia
-// ){
-//     // Optional Config object, but defaults to demo api-key and eth-mainnet.
-//     const alchemySettings = {
-//         apiKey: process.env.NEXT_PUBLIC_ALCHEMY_APY_KEY as string, // Replace with your Alchemy API Key.
-//         network: Network.ETH_SEPOLIA, // Replace with your network.
-//     };
-  
-//     const alchemy = new Alchemy(alchemySettings);
-
-//     let i = 0;
-//     let pageKey: string|undefined = "some page key";
-//     let txs: AssetTransfersWithMetadataResponse;
-//     for(; i < page && pageKey; i++){
-//         txs = await alchemy.core.getAssetTransfers({
-//             contractAddresses: [contractAddress],
-//             category: [AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155],
-//             withMetadata: true,
-//             maxCount: pageSize,
-//             pageKey
-//         })
-//         pageKey = txs.pageKey;
-//     }
-//     if (i < page) {
-//         return [];
-//     }
-// }
 // TODO - fix the type of the function
 export async function getDrugExposureHistory<T1>(
     page: number, 
