@@ -30,15 +30,7 @@ import { NoteHistoryList } from "./resources/list/NoteHistoryList";
 import { NoteHistoryShow } from "./resources/show/NoteHistoryShow";
 import { DrugExposureHistoryShow } from "./resources/show/DrugExposureHistoryShow";
 
-// Optional Config object, but defaults to demo api-key and eth-mainnet.
-// const settings = {
-//   apiKey: "demo", // Replace with your Alchemy API Key.
-//   network: Network.ETH_SEPOLIA, // Replace with your network.
-// };
 
-// const alchemy = new Alchemy(settings);
-//TODO - add traceability to notes and drug exposures. some similar to a historic for
-// each item
 //TODO - maybe merge the react admin react query client with wagmi react query client
 //TODO - create a wrapper component that check for wallet connection in the sc state 
 // modifier components.
@@ -53,7 +45,6 @@ const AdminApp = () => {
   }
   
   const dataProvider = createDataProvider(
-    mapper,
     publicClient!,
     walletClient!,
     helia!
