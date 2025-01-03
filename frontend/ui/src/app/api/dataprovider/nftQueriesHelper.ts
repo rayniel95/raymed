@@ -253,6 +253,7 @@ export async function getHistory<T1>(
 ): Promise<any[]>{
     const nfts: any[] = []
     const entityResponse = await query(pageSize, (page - 1) * pageSize);
+    console.log(entityResponse)
     const nftsPromises = await Promise.allSettled(
         entityResponse.map(async function(entity: any):Promise<T1|null> {
             try {

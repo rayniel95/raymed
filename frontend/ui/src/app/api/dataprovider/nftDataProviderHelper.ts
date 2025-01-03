@@ -4,6 +4,7 @@ import { Helia } from "helia";
 import { combineDataProviders, DataProvider } from "react-admin";
 import nftHistoryDataProvider from "./nftDataProviderHistory";
 import { Routes, RoutesHistory } from "../routes";
+import { mapper, mapperHistory } from "./pathToContractMapper";
 
 export function transformModelToDashboard<T>(
     model: T, id: number
@@ -16,7 +17,6 @@ export function transformModelToDashboard<T>(
 }
 
 export function createDataProvider(
-    mapper: Record<string, "0x{string}">,
     publicClient: UseClientReturnType, //TODO - set the appropiate type from public client
     walletClient: UseWalletClientReturnType,
     heliaNode: Helia
@@ -29,7 +29,7 @@ export function createDataProvider(
         heliaNode!
     )
     const historyDataProvider = nftHistoryDataProvider(
-        mapper,
+        mapperHistory,
         publicClient,
         walletClient,
         heliaNode!
