@@ -259,9 +259,8 @@ export async function getHistory<T1>(
         (entityResponse.data[propertyName] as IQueryObject[]).map(async function(entity: IQueryObject):Promise<T1|null> {
             try {
                 const uri = entity.uri;
-                const metadata = await getMetadataForNft<T1>(uri, heliaNode)
-                // console.log(metadata)
-                return metadata
+                const metadata = await getMetadataForNft<T1>(`ipfs://${uri}`, heliaNode)
+                return {tokenId: entity.tokenId, ...metadata}
             } catch (error) {
                 console.log(error)
                 return null
