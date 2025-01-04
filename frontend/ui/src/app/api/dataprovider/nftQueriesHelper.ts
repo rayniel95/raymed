@@ -6,6 +6,7 @@ import { UseClientReturnType } from 'wagmi';
 import { config } from '@/app/blockchain/config';
 import { getTransactionReceipt } from 'wagmi/actions';
 import { transformModelToDashboard } from './nftDataProviderHelper';
+import { IBaseQueryResult, IQueryObject } from '../queries/types';
 
 
 export function getNftsUriForContract(
@@ -249,26 +250,25 @@ export async function getHistory<T1>(
     page: number, 
     pageSize: number,
     query: (arg0: number, arg1: number)=>Promise<any>,
+    propertyName: string,
     heliaNode: Helia
 ): Promise<any[]>{
     const nfts: any[] = []
     const entityResponse = await query(pageSize, (page - 1) * pageSize);
-    console.log(entityResponse)
     const nftsPromises = await Promise.allSettled(
-        entityResponse.map(async function(entity: any):Promise<T1|null> {
+        (entityResponse.data[propertyName] as IQueryObject[]).map(async function(entity: IQueryObject):Promise<T1|null> {
             try {
                 const uri = entity.uri;
                 const metadata = await getMetadataForNft<T1>(uri, heliaNode)
                 // console.log(metadata)
                 return metadata
             } catch (error) {
-                // console.log(error)
+                console.log(error)
                 return null
             }
         })
     )
-    nftsPromises.forEach(function(element: any) {
-        // console.log(element)
+    nftsPromises.forEach(function(element: PromiseSettledResult<T1|null>) {
         if (element.status === 'fulfilled' && element.value !== null) {
             nfts.push(element.value)
         }
