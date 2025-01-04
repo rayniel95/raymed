@@ -29,6 +29,7 @@ import { createDataProvider } from "../api/dataprovider/nftDataProviderHelper";
 import { NoteHistoryList } from "./resources/list/NoteHistoryList";
 import { NoteHistoryShow } from "./resources/show/NoteHistoryShow";
 import { DrugExposureHistoryShow } from "./resources/show/DrugExposureHistoryShow";
+import { DrugExposureHistoryList } from "./resources/list/DrugExposureHistoryList";
 
 
 //TODO - maybe merge the react admin react query client with wagmi react query client
@@ -99,7 +100,7 @@ const AdminApp = () => {
       />
       <Resource
         name={RoutesHistory.DrugExposureHistoryRoute.toString()}
-        list={DrugExposureHistoryShow}
+        list={DrugExposureHistoryList}
         show={DrugExposureHistoryShow}
       />
     </Admin>
