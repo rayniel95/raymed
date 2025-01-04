@@ -1,5 +1,8 @@
-import {NoteResolvers, DrugExposureResolvers} from '@/app/api/queries/.graphclient'
-
+export interface IQueryObject {
+  id: string;
+  tokenId: string;
+  uri: string;
+}
 
 export interface IBaseQueryResult<T> {
   data: T;
@@ -7,11 +10,11 @@ export interface IBaseQueryResult<T> {
 }
 
 export interface IDrugExposureQueryResult {
-    drugExposures: DrugExposureResolvers[]
+    drugExposures: IQueryObject[]
 }
 
 export interface INoteQueryResult{
-    notes: NoteResolvers[]
+    notes: IQueryObject[]
 }
 
 export type TNoteQueryResult = IBaseQueryResult<INoteQueryResult>
