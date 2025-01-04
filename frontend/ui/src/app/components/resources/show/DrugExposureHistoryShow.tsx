@@ -11,14 +11,7 @@ export const DrugExposureHistoryShow = () => (
             <NumberField source="daysSupply" />
             <NumberField source="lotNumber" />
             <TextField source="stopReason" />
-            <ReferenceField source="id" label="Patient" reference="patients">
-                <SimpleShowLayout>
-                    <TextField source="firstName"/>
-                    <TextField source="secondName" />
-                    <TextField source="firstLastName" />
-                    <TextField source="secondLastName" />
-                </SimpleShowLayout>
-            </ReferenceField>
+            <TextField source="tokenId" label="DrugExposure id" />
         </SimpleShowLayout>
     </Show>
 );
