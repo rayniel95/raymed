@@ -1,6 +1,6 @@
 import { CreateParams, DataProvider, DeleteManyParams, DeleteParams, GetListParams, GetManyParams, GetManyReferenceParams, GetOneParams, QueryFunctionContext, RaRecord, UpdateManyParams, UpdateParams } from "react-admin";
 import { UseClientReturnType, UseWalletClientReturnType } from "wagmi";
-import { getHistory } from "./nftQueriesHelper";
+import { addTokenIdToMetadata, getHistory } from "./nftQueriesHelper";
 import { Helia } from "helia";
 import { BaseModel } from "@/app/models/base";
 
@@ -20,36 +20,45 @@ export default function nftHistoryDataProvider(
             resource: string, 
             params: GetListParams & QueryFunctionContext
         ) => {
+            console.log(resource)
             //TODO - fix generics, use the union type of all models
             const nfts= await getHistory<T1>(
                 params.pagination?.page!, 
                 params.pagination?.perPage!,
                 mapper[resource],
+                resource.split('/')[0],
                 heliaNode
             )
             // console.log(result)
             return {
-                data: nfts,
+                data: addTokenIdToMetadata(
+                    nfts, params.pagination?.page! - 1, 
+                    params.pagination?.perPage!
+                ),
+                // NOTE: totalsupply can be calculated using the total tx that
+                // has been sent to the contract. this is not implemented
                 // total: totalSupply?Number(totalSupply):undefined,
-                // pageInfo: {
-                //     hasNextPage: totalSupply?params.pagination?.page! < Number(totalSupply):undefined,
-                //     hasPreviousPage: params.pagination?.page! > 1
-                // }
+                pageInfo: {
+                    hasNextPage: true,
+                    hasPreviousPage: params.pagination?.page! > 1
+                }
             }
         }, // get a list of records based on sort, filter, and pagination
         getOne: async <T1 extends RaRecord>(
             resource: string, 
             params:GetOneParams
         ) => {
+            console.log(params)
             const nfts = await getHistory<T1>(
-                params.id!,
+                parseInt(params.id!)+1,
                 1,
                 mapper[resource],
+                resource.split('/')[0],
                 heliaNode
             )
-
+            
             return {
-                data: nfts[0]
+                data: {...nfts[0], id:params.id! }
             }
         }, // get a single record by id
         getMany: async <T1 extends RaRecord>(
