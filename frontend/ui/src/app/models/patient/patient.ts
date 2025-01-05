@@ -14,3 +14,20 @@ export interface IPatient extends BaseModel {
 }
 
 export interface IPatientDashboard extends RaRecord, IPatient {}
+
+export const patientEthnicity = [
+    { id: 'african', name: 'African' },
+    { id: 'asian', name: 'Asian' },
+    { id: 'caucasian', name: 'Caucasian' },
+    { id: 'hispanic', name: 'Hispanic' },
+    { id: 'middleEastern', name: 'Middle Eastern' },
+    { id: 'nativeAmerican', name: 'Native American' },
+    { id: 'pacificIslander', name: 'Pacific Islander' },
+    { id: 'white', name: 'White' },
+];
+
+export const patientGender = [
+    { id: 'male', name: 'Male' },
+    { id: 'female', name: 'Female' },
+    { id: 'other', name: 'Other' },
+];
