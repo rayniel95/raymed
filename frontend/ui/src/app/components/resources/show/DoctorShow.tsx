@@ -1,3 +1,4 @@
+import { doctorSpecialty } from "@/app/models/doctor/doctor";
 import { TextField, EmailField, NumberField, SelectField, Show, SimpleShowLayout } from "react-admin";
 
 export const DoctorShow = () => (
@@ -8,7 +9,7 @@ export const DoctorShow = () => (
             <TextField source="secondName" />
             <TextField source="firstLastName" />
             <TextField source="secondLastName" />
-            <SelectField source="specialty" />
+            <SelectField source="specialty" choices={doctorSpecialty} />
             <EmailField source="email" />
             <TextField source="phone" />
         </SimpleShowLayout>

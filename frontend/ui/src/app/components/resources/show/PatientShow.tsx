@@ -1,3 +1,4 @@
+import { patientEthnicity, patientGender } from "@/app/models/patient/patient";
 import { TextField, NumberField, SelectField, Show, SimpleShowLayout, ReferenceField, ReferenceManyField, Datagrid } from "react-admin";
 //TODO - add relations between resources with a pretty field
 export const PatientShow = () => (
@@ -11,8 +12,8 @@ export const PatientShow = () => (
             <NumberField source="yearOfBirth" />
             <NumberField source="monthOfBirth" />
             <NumberField source="dayOfBirth" />
-            <SelectField source="ethnicity" />
-            <SelectField source="gender" />
+            <SelectField source="ethnicity" choices={patientEthnicity} />
+            <SelectField source="gender" choices={patientGender} />
             <ReferenceManyField source="owner" label="Drug Exposures" target="owner" reference="drugExposures">
                 <Datagrid>
                     <TextField source="type" />

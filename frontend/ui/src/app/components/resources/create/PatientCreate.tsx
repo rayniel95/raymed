@@ -1,3 +1,4 @@
+import { patientEthnicity, patientGender } from "@/app/models/patient/patient";
 import { Create, SimpleForm, NumberInput, TextInput, SelectInput } from "react-admin";
 //TODO - add relations between resources
 export const PatientCreate = () => (
@@ -11,8 +12,8 @@ export const PatientCreate = () => (
             <NumberInput source="yearOfBirth" />
             <NumberInput source="monthOfBirth" />
             <NumberInput source="dayOfBirth" />
-            <SelectInput source="ethnicity" />
-            <SelectInput source="gender" />
+            <SelectInput source="ethnicity" choices={patientEthnicity} />
+            <SelectInput source="gender" choices={patientGender} />
         </SimpleForm>
     </Create>
 );

@@ -1,3 +1,4 @@
+import { patientEthnicity, patientGender } from "@/app/models/patient/patient";
 import { List, Datagrid, TextField, NumberField, SelectField } from "react-admin";
 //TODO - add relations between resources
 export const PatientList = () => (
@@ -12,8 +13,8 @@ export const PatientList = () => (
             <NumberField source="yearOfBirth" />
             <NumberField source="monthOfBirth" />
             <NumberField source="dayOfBirth" />
-            <SelectField source="ethnicity" />
-            <SelectField source="gender" />
+            <SelectField source="ethnicity"  choices={patientEthnicity}/>
+            <SelectField source="gender" choices={patientGender} />
         </Datagrid>
     </List>
 );

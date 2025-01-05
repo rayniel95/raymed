@@ -1,3 +1,4 @@
+import { doctorSpecialty } from "@/app/models/doctor/doctor";
 import { Create, SimpleForm, NumberInput, TextInput, SelectInput } from "react-admin";
 
 export const DoctorCreate = () => (
@@ -8,7 +9,7 @@ export const DoctorCreate = () => (
             <TextInput source="secondName" />
             <TextInput source="firstLastName" />
             <TextInput source="secondLastName" />
-            <SelectInput source="specialty" />
+            <SelectInput source="specialty" choices={doctorSpecialty} />
             <TextInput source="email" />
             <TextInput source="phone" />
         </SimpleForm>
