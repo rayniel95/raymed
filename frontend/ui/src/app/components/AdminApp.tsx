@@ -97,11 +97,13 @@ const AdminApp = () => {
         name={RoutesHistory.NoteHistoryRoute.toString()}
         list={NoteHistoryList}
         show={NoteHistoryShow}
+        options={{ label: 'Note History' }}
       />
       <Resource
         name={RoutesHistory.DrugExposureHistoryRoute.toString()}
         list={DrugExposureHistoryList}
         show={DrugExposureHistoryShow}
+        options={{ label: 'Drug Exposure History' }}
       />
     </Admin>
   )
