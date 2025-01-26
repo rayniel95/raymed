@@ -3,7 +3,8 @@ type Note @entity(immutable: true) {
   tokenId: BigInt! # uint256
   uri: String! # string
 }
-
+#TODO - would be great to have the block number or the date of
+# the creation of the record, this will help to sort the records
 type DrugExposure @entity(immutable: true) {
   id: Bytes!
   tokenId: BigInt! # uint256
