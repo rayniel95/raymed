@@ -120,7 +120,10 @@ export default function nftDataProvider(
                 [params.data.owner,await uri]
             )
             // const tokenId = await getNftTokenId(mintResult)
-            return {
+            return { //TODO - this need to be fixed, try to look for the id of the token
+                // this can be solved query the state and getting the total number of tokens
+                // in the get list result. if using the 0 index the token 0 is shown
+                // that means that this token is stored in the state.
                 data: {id:0, ...params.data} as any
             }
         }, // create a record
