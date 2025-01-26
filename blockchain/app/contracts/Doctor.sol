@@ -6,7 +6,7 @@ import {GenericNft} from "./common/GenericNft.sol";
 
 
 contract Doctor is GenericNft {
-
+    //TODO - for this specific contract, there can only be one owner per token
     constructor(
         address adminNftContractAddress
     ) GenericNft("Doctor", "DTK", adminNftContractAddress) {}

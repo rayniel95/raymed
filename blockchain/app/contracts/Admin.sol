@@ -17,7 +17,8 @@ contract Admin is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ow
 
     function _baseURI() internal pure override returns (string memory) {
         return "ipfs://";
-    }
+    }    //TODO - for this specific contract, there can only be one owner per token
+
     function safeMint(address to, string memory uri) public onlyOwner{
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
