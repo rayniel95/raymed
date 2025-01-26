@@ -11,6 +11,7 @@ export const DrugExposureHistoryList = () => (
             <NumberField source="daysSupply" />
             <NumberField source="lotNumber" />
             <TextField source="stopReason" />
+            <NumberField source="tokenId" label="DrugExposure id" />
         </Datagrid>
     </List>
 );
