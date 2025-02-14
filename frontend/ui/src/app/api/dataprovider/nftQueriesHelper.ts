@@ -7,6 +7,9 @@ import { config } from '@/app/blockchain/config';
 import { getTransactionReceipt } from 'wagmi/actions';
 import { transformModelToDashboard } from './nftDataProviderHelper';
 import { IBaseQueryResult, IQueryObject } from '../queries/types';
+import { createKey } from '@/app/ipfs/createKey';
+import { pinata } from '@/app/ipfs/config';
+import { GetCIDResponse } from 'pinata-web3';
 
 
 export function getNftsUriForContract(
@@ -40,27 +43,31 @@ export async function getMetadataForNft<T1>(
     uri: string, 
     heliaNode: Helia
 ){
-    const j = json(heliaNode)
-    let obj: T1 | undefined = undefined;
+    // const j = json(heliaNode)
+    let obj: GetCIDResponse | undefined = undefined;
     try {
-            obj = await j.get(
-            CID.parse(uri.slice(7)), 
-            {signal: AbortSignal.timeout(10000)}
-        )
+        obj = await pinata.gateways.get(uri.split('/')[2])
+        // obj = await j.get(
+        //     CID.parse(uri.slice(7)), 
+        //     {signal: AbortSignal.timeout(10000)}
+        // )
     } catch (error) {
         //TODO - if the error is 404 return undefined but throw in other case
     }
-    return obj as T1
+    return obj!.data as T1
 }
 
 export async function postMetadataForNft(
     metadata: any, 
     heliaNode: Helia
 ){
-    const j = json(heliaNode)
+    // const j = json(heliaNode)
 
-    const cid = await j.add(metadata)
-    return cid.toString()
+    // const cid = await j.add(metadata)
+    // return cid.toString()
+    const keyData = await createKey();
+    const upload = await pinata.upload.json(metadata).key(keyData!.JWT);
+    return upload.IpfsHash;
 }
 
 export async function getNfts<T1>(
@@ -260,7 +267,7 @@ export async function getHistory<T1>(
             try {
                 const uri = entity.uri;
                 const metadata = await getMetadataForNft<T1>(`ipfs://${uri}`, heliaNode)
-                return {tokenId: entity.tokenId, ...metadata}
+                return metadata? {tokenId: entity.tokenId, ...metadata}:null
             } catch (error) {
                 console.log(error)
                 return null
