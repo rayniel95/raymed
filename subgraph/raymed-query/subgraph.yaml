@@ -8,9 +8,9 @@ dataSources:
     name: DrugExposure
     network: sepolia
     source:
-      address: "0xD9f400fdE4cC70Fe7F3Af73876aB48b41dB9f229"
+      address: "0xF136b7a0D1369011897bB4bD7f1A81CfC883369A"
       abi: DrugExposure
-      startBlock: 7381207
+      startBlock: 7676602
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -31,9 +31,9 @@ dataSources:
     name: Note
     network: sepolia
     source:
-      address: "0xb88c40ECf53d38309C2f124CC802399cbE5a16F6"
+      address: "0x3b66a8147fFc81A1026cdCD6A9798b8b972a51c9"
       abi: DrugExposure
-      startBlock: 7381208
+      startBlock: 7676603
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
