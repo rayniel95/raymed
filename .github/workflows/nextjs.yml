@@ -48,19 +48,18 @@ jobs:
       #       echo "Unable to determine package manager"
       #       exit 1
       #     fi
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: pnpm
-          cache-dependency-path: ./frontend/ui/pnpm-lock.yaml
-
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
         with:
           version: 9
           run_install: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: ./frontend/ui/pnpm-lock.yaml
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
