@@ -1,6 +1,5 @@
 import { AuthProvider, QueryFunctionContext } from 'react-admin'
 import { UseWalletClientReturnType } from 'wagmi';
-import { account } from '@/app/blockchain/account';
 
 export function authProvider(
     walletClient: UseWalletClientReturnType,
